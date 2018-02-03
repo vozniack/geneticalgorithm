@@ -25,20 +25,4 @@ public class BitString extends Mutation {
 
         modifyChromosome(chromosome, genome);
     }
-
-    @Override
-    protected void modifyChromosome(Chromosome chromosome, char[] genome) {
-        Integer chromosomeSize = genome.length / 2;
-        Integer[] x = new Integer[chromosomeSize];
-        Integer[] y = new Integer[chromosomeSize];
-
-        for (int i = 0; i < chromosomeSize; i++) {
-            x[i] = (int) genome[i];
-            y[i] = (int) genome[i + chromosomeSize];
-        }
-
-        chromosome.setValueX(x);
-        chromosome.setValueY(y);
-        population.add(chromosome);
-    }
 }

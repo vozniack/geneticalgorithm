@@ -2,6 +2,7 @@ package pl.wozniaktomek.algorithm;
 
 import pl.wozniaktomek.algorithm.crossover.SinglePoint;
 import pl.wozniaktomek.algorithm.mutation.BitString;
+import pl.wozniaktomek.algorithm.mutation.FlipBit;
 import pl.wozniaktomek.algorithm.selection.Roulette;
 
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ public class GeneticAlgorithm implements Runnable {
                 break;
 
             case FLIPBIT:
+                clonePopulation(new FlipBit(currentPopulation).getPopulation());
                 break;
         }
     }

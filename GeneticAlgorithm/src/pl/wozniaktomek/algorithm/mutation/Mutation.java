@@ -9,11 +9,25 @@ abstract class Mutation {
     Integer probability;
 
     protected abstract void mutateChromosome(Chromosome chromosome);
-    protected abstract void modifyChromosome(Chromosome chromosome, char[] genome);
 
     void mutatePopulation() {
         for (Chromosome chromosome : population)
             mutateChromosome(chromosome);
+    }
+
+    void modifyChromosome(Chromosome chromosome, char[] genome) {
+        Integer chromosomeSize = genome.length / 2;
+        Integer[] x = new Integer[chromosomeSize];
+        Integer[] y = new Integer[chromosomeSize];
+
+        for (int i = 0; i < chromosomeSize; i++) {
+            x[i] = (int) genome[i];
+            y[i] = (int) genome[i + chromosomeSize];
+        }
+
+        chromosome.setValueX(x);
+        chromosome.setValueY(y);
+        population.add(chromosome);
     }
 
     public ArrayList<Chromosome> getPopulation() {
