@@ -42,23 +42,10 @@ public class WindowControl implements Initializable {
     private NumberAxis xAxis;
     private NumberAxis yAxis;
 
-    private void addListeners() {
-        rangeFrom.textProperty().addListener(((observable, oldValue, newValue) -> {
-            newValue = newValue.replace(",", ".");
-            xAxis.setLowerBound(Math.round(Double.valueOf(newValue)) - 1);
-            yAxis.setLowerBound(Math.round(Double.valueOf(newValue)) - 1);
-        }));
-
-        rangeTo.textProperty().addListener(((observable, oldValue, newValue) -> {
-            newValue = newValue.replace(",", ".");
-            xAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 1);
-            yAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 1);
-        }));
-    }
-
-    private void addActions() {
-        menuClose.setOnAction(event -> closeProgram());
-        buttonDefault.setOnAction(event -> defaultData());
+    /* Buttons actions methods */
+    private void closeProgram() {
+        Platform.exit();
+        System.exit(0);
     }
 
     private void defaultData() {
@@ -76,13 +63,24 @@ public class WindowControl implements Initializable {
         isChartAnimated.setSelected(true);
     }
 
-    private void fillControls() {
-        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
-        methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double", "Multi"));
-        methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));
+    /* Initialization methods */
+    private void addActions() {
+        menuClose.setOnAction(event -> closeProgram());
+        buttonDefault.setOnAction(event -> defaultData());
+    }
 
-        probabilityCrossover.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));
-        probabilityMutation.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));
+    private void addListeners() {
+        rangeFrom.textProperty().addListener(((observable, oldValue, newValue) -> {
+            newValue = newValue.replace(",", ".");
+            xAxis.setLowerBound(Math.round(Double.valueOf(newValue)) - 1);
+            yAxis.setLowerBound(Math.round(Double.valueOf(newValue)) - 1);
+        }));
+
+        rangeTo.textProperty().addListener(((observable, oldValue, newValue) -> {
+            newValue = newValue.replace(",", ".");
+            xAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 1);
+            yAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 1);
+        }));
     }
 
     private void createChart() {
@@ -92,16 +90,20 @@ public class WindowControl implements Initializable {
         vBox.getChildren().add(chart);
     }
 
-    private void closeProgram() {
-        Platform.exit();
-        System.exit(0);
+    private void fillControls() {
+        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
+        methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double", "Multi"));
+        methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));
+
+        probabilityCrossover.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));
+        probabilityMutation.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         fillControls();
         createChart();
-        addActions();
         addListeners();
+        addActions();
     }
 }

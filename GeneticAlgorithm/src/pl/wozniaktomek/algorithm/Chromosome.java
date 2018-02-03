@@ -22,6 +22,7 @@ public class Chromosome implements Cloneable {
         countProperties();
     }
 
+    /* Calculation methods */
     private void countProperties() {
         maxValue = 0d;
         for (int i = 0; i < x.length; i++)
@@ -49,6 +50,7 @@ public class Chromosome implements Cloneable {
         return value;
     }
 
+    /* Getters & setters */
     public Double getValueX() {
         return minRange + ((maxRange - minRange) * countValue(ValueType.X) / maxValue);
     }
@@ -93,6 +95,7 @@ public class Chromosome implements Cloneable {
         return string.toString();
     }
 
+    /* Cloning */
     @Override
     protected Chromosome clone() throws CloneNotSupportedException {
         Chromosome clone;
