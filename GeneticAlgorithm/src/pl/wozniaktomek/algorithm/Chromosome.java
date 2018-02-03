@@ -95,6 +95,18 @@ public class Chromosome implements Cloneable {
         return string.toString();
     }
 
+    public Double getMinRange() {
+        return minRange;
+    }
+
+    public Double getMaxRange() {
+        return maxRange;
+    }
+
+    public Integer getSize() {
+        return x.length;
+    }
+
     /* Cloning */
     @Override
     protected Chromosome clone() throws CloneNotSupportedException {

@@ -1,6 +1,5 @@
 package pl.wozniaktomek.algorithm.selection;
 
-
 import pl.wozniaktomek.algorithm.Chromosome;
 
 import java.util.ArrayList;
@@ -9,7 +8,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Roulette extends Selection {
     private Double sumOfDistribution = 0d;
 
-    Roulette(ArrayList<Chromosome> oldPopulation) {
+    public Roulette(ArrayList<Chromosome> oldPopulation) {
         this.oldPopulation = oldPopulation;
         countFitness();
         sortPopulation(true);

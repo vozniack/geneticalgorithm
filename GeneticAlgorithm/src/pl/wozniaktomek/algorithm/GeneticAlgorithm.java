@@ -1,5 +1,8 @@
 package pl.wozniaktomek.algorithm;
 
+import pl.wozniaktomek.algorithm.crossover.SinglePoint;
+import pl.wozniaktomek.algorithm.selection.Roulette;
+
 import java.util.ArrayList;
 
 public class GeneticAlgorithm implements Runnable {
@@ -9,8 +12,7 @@ public class GeneticAlgorithm implements Runnable {
     private enum MutationMethod {BITSTRING, FLIPBIT}
 
     /* Initial data */
-    private Integer generationsAmount;
-    private Double probabilityCrossover, probabilityMutation;
+    private Integer generationsAmount, probabilityCrossover, probabilityMutation;
     private SelectionMethod selectionMethod;
     private CrossoverMethod crossoverMethod;
     private MutationMethod mutationMethod;
@@ -20,7 +22,7 @@ public class GeneticAlgorithm implements Runnable {
     private volatile Boolean isRunning;
 
     /* Initializing methods */
-    GeneticAlgorithm(Integer populationSize, Integer chromosomeSize, Integer generationsAmount, Double probabilityCrossover, Double probabilityMutation, Double minRange, Double maxRange) {
+    GeneticAlgorithm(Integer populationSize, Integer chromosomeSize, Integer generationsAmount, Integer probabilityCrossover, Integer probabilityMutation, Double minRange, Double maxRange) {
         this.generationsAmount = generationsAmount;
         this.probabilityCrossover = probabilityCrossover;
         this.probabilityMutation = probabilityMutation;
@@ -66,15 +68,41 @@ public class GeneticAlgorithm implements Runnable {
     }
 
     private void selection() {
-        // TODO
+        switch (selectionMethod) {
+            case ROULETTE:
+                clonePopulation(new Roulette(currentPopulation).getPopulation());
+                break;
+
+            case TOURNAMENT:
+                break;
+
+            case RANKING:
+                break;
+        }
     }
 
     private void crossover() {
-        // TODO
+        switch (crossoverMethod) {
+            case SINGLE:
+                clonePopulation(new SinglePoint(currentPopulation, probabilityCrossover).getPopulation());
+                break;
+
+            case DOUBLE:
+                break;
+
+            case MULTI:
+                break;
+        }
     }
 
     private void mutation() {
-        // TODO
+        switch (mutationMethod) {
+            case BITSTRING:
+                break;
+
+            case FLIPBIT:
+                break;
+        }
     }
 
     private Boolean checkPopulation() {

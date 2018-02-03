@@ -9,6 +9,8 @@ abstract class Selection {
      ArrayList<Chromosome> oldPopulation;
      ArrayList<Chromosome> newPopulation;
 
+    protected abstract void selectPopulation();
+
     void countFitness() {
         for (Chromosome chromosome : oldPopulation)
             chromosome.setFitness(new Function().getResult(chromosome.getValueX(), chromosome.getValueY()));
@@ -30,10 +32,7 @@ abstract class Selection {
             }
     }
 
-     ArrayList<Chromosome> getPopulation() {
+     public ArrayList<Chromosome> getPopulation() {
          return newPopulation;
      }
-
-     protected abstract void selectPopulation();
-
 }
