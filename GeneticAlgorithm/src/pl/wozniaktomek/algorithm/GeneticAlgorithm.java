@@ -1,6 +1,7 @@
 package pl.wozniaktomek.algorithm;
 
 import pl.wozniaktomek.algorithm.crossover.SinglePoint;
+import pl.wozniaktomek.algorithm.mutation.BitString;
 import pl.wozniaktomek.algorithm.selection.Roulette;
 
 import java.util.ArrayList;
@@ -98,6 +99,7 @@ public class GeneticAlgorithm implements Runnable {
     private void mutation() {
         switch (mutationMethod) {
             case BITSTRING:
+                clonePopulation(new BitString(currentPopulation, probabilityMutation).getPopulation());
                 break;
 
             case FLIPBIT:

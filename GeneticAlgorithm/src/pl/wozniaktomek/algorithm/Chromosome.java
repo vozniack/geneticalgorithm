@@ -59,6 +59,14 @@ public class Chromosome implements Cloneable {
         return minRange + ((maxRange - minRange) * countValue(ValueType.Y) / maxValue);
     }
 
+    public void setValueX(Integer[] x) {
+        this.x = x;
+    }
+
+    public void setValueY(Integer[] y) {
+        this.y = y;
+    }
+
     public void setFitness(Double fitness) {
         this.fitness = fitness;
     }
