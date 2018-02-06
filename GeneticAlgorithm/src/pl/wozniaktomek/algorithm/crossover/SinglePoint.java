@@ -16,32 +16,25 @@ public class SinglePoint extends Crossover {
     }
 
     @Override
-    protected void crossString(String first, String second) {
-        Integer point = ThreadLocalRandom.current().nextInt(0, first.length());
+    protected void crossGenome(String firstGenome, String secondGenome) {
+        Integer point = ThreadLocalRandom.current().nextInt(0, firstGenome.length());
 
-        for (int i = 0; i < point + 1; i++) {
-            newFirst.append(first.charAt(i));
-            newSecond.append(second.charAt(i));
-        }
+        char[] newFirstGenome = (firstGenome.substring(0, point) + secondGenome.substring(point, firstGenome.length())).toCharArray();
+        char[] newSecondGenome = (secondGenome.substring(0, point) + firstGenome.substring(point, firstGenome.length())).toCharArray();
 
-        for (int i = point + 1; i < first.length(); i++) {
-            newFirst.append(second.charAt(i));
-            newSecond.append(first.charAt(i));
-        }
-
-        createChromosome(newFirst.toString());
-        createChromosome(newSecond.toString());
+        createChromosome(newFirstGenome);
+        createChromosome(newSecondGenome);
     }
 
     @Override
-    protected void createChromosome(String genome) {
-        Integer chromosomeSize = genome.length() / 2;
+    protected void createChromosome(char[] genome) {
+        Integer chromosomeSize = genome.length / 2;
         Integer[] x = new Integer[chromosomeSize];
         Integer[] y = new Integer[chromosomeSize];
 
         for (int i = 0; i < chromosomeSize; i++) {
-            x[i] = (int) genome.charAt(i);
-            y[i] = (int) genome.charAt(i + chromosomeSize);
+            x[i] = (Integer.valueOf(String.valueOf(genome[i])));
+            y[i] = (Integer.valueOf(String.valueOf(genome[i + chromosomeSize])));
         }
 
         addChromosome(x, y);

@@ -11,8 +11,8 @@ abstract class Mutation {
     protected abstract void mutateChromosome(Chromosome chromosome);
 
     void mutatePopulation() {
-        for (Chromosome chromosome : population)
-            mutateChromosome(chromosome);
+        for (int i = 0; i < population.size(); i++)
+            mutateChromosome(population.get(i));
     }
 
     void modifyChromosome(Chromosome chromosome, char[] genome) {
@@ -20,9 +20,11 @@ abstract class Mutation {
         Integer[] x = new Integer[chromosomeSize];
         Integer[] y = new Integer[chromosomeSize];
 
+        System.out.println("After mutation:  " + String.valueOf(genome));
+
         for (int i = 0; i < chromosomeSize; i++) {
-            x[i] = (int) genome[i];
-            y[i] = (int) genome[i + chromosomeSize];
+            x[i] = (Integer.valueOf(String.valueOf(genome[i])));
+            y[i] = (Integer.valueOf(String.valueOf(genome[i + chromosomeSize])));
         }
 
         chromosome.setValueX(x);

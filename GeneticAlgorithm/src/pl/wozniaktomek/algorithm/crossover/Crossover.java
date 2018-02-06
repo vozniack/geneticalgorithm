@@ -9,15 +9,13 @@ abstract class Crossover {
     ArrayList<Chromosome> population;
     Integer probability, chromosomeSize;
     Double minRange, maxRange;
-    StringBuilder newFirst = new StringBuilder();
-    StringBuilder newSecond = new StringBuilder();
 
-    protected abstract void crossString(String first, String second);
-    protected abstract void createChromosome(String genome);
+    protected abstract void crossGenome(String firstGenome, String secondGenome);
+    protected abstract void createChromosome(char[] genome);
 
     void crossPopulation() {
         for (int i = 0; i < population.size(); i++)
-            if (ThreadLocalRandom.current().nextInt(0, 101) < probability)
+            if (ThreadLocalRandom.current().nextInt(0, 100) < probability)
                 crossChromosomes();
     }
 
@@ -25,9 +23,9 @@ abstract class Crossover {
         Chromosome firstChromosome = selectChromosome();
         Chromosome secondChromosome = selectChromosome();
 
-        String first = firstChromosome.getStringX() + firstChromosome.getStringY();
-        String second = secondChromosome.getStringX() + secondChromosome.getStringY();
-        crossString(first, second);
+        String firstGenome = firstChromosome.getStringX() + firstChromosome.getStringY();
+        String secondGenome = secondChromosome.getStringX() + secondChromosome.getStringY();
+        crossGenome(firstGenome, secondGenome);
     }
 
     private Chromosome selectChromosome() {

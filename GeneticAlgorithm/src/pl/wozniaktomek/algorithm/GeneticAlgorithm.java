@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class GeneticAlgorithm implements Runnable {
     /* Operations */
-    private enum SelectionMethod {ROULETTE, TOURNAMENT, RANKING}
-    private enum CrossoverMethod {SINGLE, DOUBLE, MULTI}
-    private enum MutationMethod {BITSTRING, FLIPBIT}
+    public enum SelectionMethod {ROULETTE, TOURNAMENT, RANKING}
+    public enum CrossoverMethod {SINGLE, DOUBLE, MULTI}
+    public enum MutationMethod {BITSTRING, FLIPBIT}
 
     /* Initial data */
     private Integer generationsAmount, probabilityCrossover, probabilityMutation;
@@ -48,14 +48,25 @@ public class GeneticAlgorithm implements Runnable {
 
     /* Algorithm methods */
     private void startAlgorithm() {
+        showPopulation();
+
         Integer counter = 0;
         while (isRunning) {
             if (counter.equals(generationsAmount)) break;
 
             if (checkPopulation()) {
                 selection();
+                System.out.println("\nSelection:");
+                showPopulation();
+
                 crossover();
+                System.out.println("\nCrossover:");
+                showPopulation();
+
+                System.out.println("\nMutation:");
                 mutation();
+                showPopulation();
+
                 counter++;
             }
 
@@ -66,7 +77,8 @@ public class GeneticAlgorithm implements Runnable {
     }
 
     private void stopAlgorithm() {
-        // TODO
+        System.out.println("\nFinito:");
+        showPopulation();
     }
 
     private void selection() {
@@ -126,8 +138,17 @@ public class GeneticAlgorithm implements Runnable {
             }
     }
 
+    /* Only for test */
+    private void showPopulation() {
+        for (Chromosome chromosome : currentPopulation)
+            System.out.println("[x] = " + chromosome.getValueX() + " [y] = " + chromosome.getValueY() + " [f(x,y)] = " +
+                    new Function().getResult(chromosome.getValueX(), chromosome.getValueY()) +
+                    " | " + chromosome.getStringX() + " " + chromosome.getStringY() + " | " + chromosome.getFitness());
+    }
+
     @Override
     public void run() {
+        isRunning = true;
         startAlgorithm();
     }
 }

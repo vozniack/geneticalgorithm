@@ -16,9 +16,10 @@ public class BitString extends Mutation {
     protected void mutateChromosome(Chromosome chromosome) {
         population.remove(chromosome);
         char[] genome = (chromosome.getStringX() + chromosome.getStringY()).toCharArray();
+        System.out.println("Before mutation: " + String.valueOf(genome));
 
         for (int i = 0; i < genome.length; i++)
-            if (ThreadLocalRandom.current().nextInt(0, 101) < probability) {
+            if (ThreadLocalRandom.current().nextInt(0, 100) < probability) {
                 if (genome[i] == '0') genome[i] = '1';
                 else genome[i] = '0';
             }
