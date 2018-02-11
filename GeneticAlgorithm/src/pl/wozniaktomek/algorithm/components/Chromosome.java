@@ -1,4 +1,6 @@
-package pl.wozniaktomek.algorithm;
+package pl.wozniaktomek.algorithm.components;
+
+import java.util.Arrays;
 
 public class Chromosome implements Cloneable {
     private Integer[] x;
@@ -115,9 +117,20 @@ public class Chromosome implements Cloneable {
         return x.length;
     }
 
+    /* Comparing */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Chromosome that = (Chromosome) o;
+
+        return Arrays.equals(x, that.x) && Arrays.equals(y, that.y);
+    }
+
     /* Cloning */
     @Override
-    protected Chromosome clone() throws CloneNotSupportedException {
+    public Chromosome clone() throws CloneNotSupportedException {
         Chromosome clone;
 
         try {

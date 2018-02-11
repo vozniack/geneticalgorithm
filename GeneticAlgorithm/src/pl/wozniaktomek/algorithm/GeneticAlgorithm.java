@@ -1,5 +1,8 @@
 package pl.wozniaktomek.algorithm;
 
+import pl.wozniaktomek.algorithm.components.Chromosome;
+import pl.wozniaktomek.algorithm.components.Function;
+import pl.wozniaktomek.algorithm.components.Generate;
 import pl.wozniaktomek.algorithm.crossover.SinglePoint;
 import pl.wozniaktomek.algorithm.mutation.BitString;
 import pl.wozniaktomek.algorithm.mutation.FlipBit;
@@ -31,7 +34,7 @@ public class GeneticAlgorithm implements Runnable {
         generate(populationSize, chromosomeSize, minRange, maxRange);
     }
 
-    public void setMethods(SelectionMethod selectionMethod, CrossoverMethod crossoverMethod, MutationMethod mutationMethod) {
+    void setMethods(SelectionMethod selectionMethod, CrossoverMethod crossoverMethod, MutationMethod mutationMethod) {
         this.selectionMethod = selectionMethod;
         this.crossoverMethod = crossoverMethod;
         this.mutationMethod = mutationMethod;
@@ -63,8 +66,8 @@ public class GeneticAlgorithm implements Runnable {
                 System.out.println("\nCrossover:");
                 showPopulation();
 
-                System.out.println("\nMutation:");
                 mutation();
+                System.out.println("\nMutation:");
                 showPopulation();
 
                 counter++;

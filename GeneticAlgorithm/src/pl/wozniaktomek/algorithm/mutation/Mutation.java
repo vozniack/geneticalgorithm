@@ -1,6 +1,6 @@
 package pl.wozniaktomek.algorithm.mutation;
 
-import pl.wozniaktomek.algorithm.Chromosome;
+import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 
@@ -19,8 +19,6 @@ abstract class Mutation {
         Integer chromosomeSize = genome.length / 2;
         Integer[] x = new Integer[chromosomeSize];
         Integer[] y = new Integer[chromosomeSize];
-
-        System.out.println("After mutation:  " + String.valueOf(genome));
 
         for (int i = 0; i < chromosomeSize; i++) {
             x[i] = (Integer.valueOf(String.valueOf(genome[i])));

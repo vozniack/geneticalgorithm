@@ -1,6 +1,6 @@
 package pl.wozniaktomek.algorithm.mutation;
 
-import pl.wozniaktomek.algorithm.Chromosome;
+import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 

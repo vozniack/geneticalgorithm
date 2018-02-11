@@ -1,13 +1,15 @@
 package pl.wozniaktomek.algorithm.selection;
 
-import pl.wozniaktomek.algorithm.Chromosome;
-import pl.wozniaktomek.algorithm.Function;
+import pl.wozniaktomek.algorithm.components.Chromosome;
+import pl.wozniaktomek.algorithm.components.Function;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 abstract class Selection {
-     ArrayList<Chromosome> oldPopulation;
-     ArrayList<Chromosome> newPopulation;
+    ArrayList<Chromosome> oldPopulation;
+    ArrayList<Chromosome> newPopulation;
 
     protected abstract void selectPopulation();
 
@@ -17,19 +19,13 @@ abstract class Selection {
     }
 
     void sortPopulation(Boolean isAsc) {
-        if (isAsc)
-            try {
-                oldPopulation.sort((o1, o2) -> (int) (o2.getFitness() - o1.getFitness()));
-            } catch (IllegalArgumentException exception) {
-                exception.printStackTrace();
-            }
-
-        else
-            try {
-                oldPopulation.sort((o1, o2) -> (int) (o1.getFitness() - o2.getFitness()));
-            } catch (IllegalArgumentException exception) {
-                exception.printStackTrace();
-            }
+        try {
+            if (isAsc) oldPopulation.sort(Comparator.comparingDouble(Chromosome::getFitness).reversed());
+            else oldPopulation.sort(Comparator.comparingDouble(Chromosome::getFitness));
+        } catch (IllegalArgumentException exception) {
+            exception.printStackTrace();
+            // TODO STOP ALGORITHM
+        }
     }
 
      public ArrayList<Chromosome> getPopulation() {

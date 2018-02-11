@@ -1,4 +1,4 @@
-package pl.wozniaktomek.algorithm;
+package pl.wozniaktomek.algorithm.components;
 
 public class Function {
     public Double getResult(Double x, Double y) {

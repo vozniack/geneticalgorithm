@@ -1,14 +1,14 @@
-package pl.wozniaktomek.algorithm;
+package pl.wozniaktomek.algorithm.components;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
-class Generate {
+public class Generate {
     private Integer populationSize, chromosomeSize;
     private Double minRange, maxRange;
     private ArrayList<Chromosome> population;
 
-    Generate(Integer populationSize, Integer chromosomeSize, Double minRange, Double maxRange) {
+    public Generate(Integer populationSize, Integer chromosomeSize, Double minRange, Double maxRange) {
         this.populationSize = populationSize;
         this.chromosomeSize = chromosomeSize;
         this.minRange = minRange;
@@ -35,7 +35,7 @@ class Generate {
         return new Chromosome(x, y, minRange, maxRange);
     }
 
-    ArrayList<Chromosome> getPopulation() {
+    public ArrayList<Chromosome> getPopulation() {
         return population;
     }
 }

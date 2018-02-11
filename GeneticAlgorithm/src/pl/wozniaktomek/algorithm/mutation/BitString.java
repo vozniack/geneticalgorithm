@@ -1,6 +1,6 @@
 package pl.wozniaktomek.algorithm.mutation;
 
-import pl.wozniaktomek.algorithm.Chromosome;
+import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
@@ -16,7 +16,6 @@ public class BitString extends Mutation {
     protected void mutateChromosome(Chromosome chromosome) {
         population.remove(chromosome);
         char[] genome = (chromosome.getStringX() + chromosome.getStringY()).toCharArray();
-        System.out.println("Before mutation: " + String.valueOf(genome));
 
         for (int i = 0; i < genome.length; i++)
             if (ThreadLocalRandom.current().nextInt(0, 100) < probability) {

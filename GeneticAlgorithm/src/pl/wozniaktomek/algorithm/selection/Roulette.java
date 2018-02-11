@@ -1,6 +1,6 @@
 package pl.wozniaktomek.algorithm.selection;
 
-import pl.wozniaktomek.algorithm.Chromosome;
+import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
