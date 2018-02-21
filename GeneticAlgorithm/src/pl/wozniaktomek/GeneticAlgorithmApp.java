@@ -9,7 +9,7 @@ import javafx.stage.Stage;
 import pl.wozniaktomek.layout.WindowControl;
 
 public class GeneticAlgorithmApp extends Application {
-    private static WindowControl windowControl;
+    public static WindowControl windowControl;
     private Parent algorithmRoot;
     private Stage stage;
 

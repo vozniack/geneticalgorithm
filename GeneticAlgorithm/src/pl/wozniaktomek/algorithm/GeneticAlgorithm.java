@@ -1,5 +1,6 @@
 package pl.wozniaktomek.algorithm;
 
+import pl.wozniaktomek.GeneticAlgorithmApp;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 import pl.wozniaktomek.algorithm.components.Function;
 import pl.wozniaktomek.algorithm.components.Generate;
@@ -10,7 +11,7 @@ import pl.wozniaktomek.algorithm.selection.Roulette;
 
 import java.util.ArrayList;
 
-public class GeneticAlgorithm implements Runnable {
+public class GeneticAlgorithm extends Thread {
     /* Operations */
     public enum SelectionMethod {ROULETTE, TOURNAMENT, RANKING}
     public enum CrossoverMethod {SINGLE, DOUBLE, MULTI}
@@ -24,17 +25,20 @@ public class GeneticAlgorithm implements Runnable {
 
     /* Operational data */
     private ArrayList<Chromosome> currentPopulation;
+    private Integer generationCunter;
     private volatile Boolean isRunning;
+    private volatile Boolean isChart;
+    private volatile Boolean isUpdating;
 
     /* Initializing methods */
-    GeneticAlgorithm(Integer populationSize, Integer chromosomeSize, Integer generationsAmount, Integer probabilityCrossover, Integer probabilityMutation, Double minRange, Double maxRange) {
+    public GeneticAlgorithm(Integer populationSize, Integer chromosomeSize, Integer generationsAmount, Integer probabilityCrossover, Integer probabilityMutation, Double minRange, Double maxRange) {
         this.generationsAmount = generationsAmount;
         this.probabilityCrossover = probabilityCrossover;
         this.probabilityMutation = probabilityMutation;
         generate(populationSize, chromosomeSize, minRange, maxRange);
     }
 
-    void setMethods(SelectionMethod selectionMethod, CrossoverMethod crossoverMethod, MutationMethod mutationMethod) {
+    public void setMethods(SelectionMethod selectionMethod, CrossoverMethod crossoverMethod, MutationMethod mutationMethod) {
         this.selectionMethod = selectionMethod;
         this.crossoverMethod = crossoverMethod;
         this.mutationMethod = mutationMethod;
@@ -49,39 +53,50 @@ public class GeneticAlgorithm implements Runnable {
         this.isRunning = isRunning;
     }
 
+    public void setChart(Boolean isChart) {
+        this.isChart = isChart;
+    }
+
+    public void setUpdating(Boolean isUpdating) {
+        this.isUpdating = isUpdating;
+    }
+
+    private void updateUI() {
+        GeneticAlgorithmApp.windowControl.updateGeneration(generationCunter);
+        if (isChart) {
+            GeneticAlgorithmApp.windowControl.updatePopulation(currentPopulation);
+            isUpdating = true;
+            while (isUpdating) try {
+                Thread.sleep(50);
+            } catch (InterruptedException exception) {
+                exception.printStackTrace();
+            }
+        }
+    }
+
     /* Algorithm methods */
     private void startAlgorithm() {
-        showPopulation();
-
-        Integer counter = 0;
+        generationCunter = 0;
         while (isRunning) {
-            if (counter.equals(generationsAmount)) break;
+            if (generationCunter.equals(generationsAmount)) break;
 
             if (checkPopulation()) {
                 selection();
-                System.out.println("\nSelection:");
-                showPopulation();
-
                 crossover();
-                System.out.println("\nCrossover:");
-                showPopulation();
-
                 mutation();
-                System.out.println("\nMutation:");
-                showPopulation();
-
-                counter++;
+                generationCunter++;
+                updateUI();
             }
 
             else break;
         }
 
-        stopAlgorithm();
+        finishAlgorithm();
     }
 
-    private void stopAlgorithm() {
-        System.out.println("\nFinito:");
-        showPopulation();
+    private void finishAlgorithm() {
+        updateUI();
+        GeneticAlgorithmApp.windowControl.finishAlgorithm();
     }
 
     private void selection() {

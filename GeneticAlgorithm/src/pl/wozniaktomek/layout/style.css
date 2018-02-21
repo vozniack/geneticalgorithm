@@ -1,4 +1,13 @@
 .root {
     -fx-font-family: Cambria;
-    -fx-font-size: 12px;
+    -fx-font-size: 12 px;
+}
+
+/* Controls error classes */
+.text-field.error {
+    -fx-border-color: red;
+}
+
+.combo-box.error {
+    -fx-border-color: red;
 }

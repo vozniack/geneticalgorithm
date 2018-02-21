@@ -3,6 +3,7 @@ package pl.wozniaktomek.algorithm.mutation;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
 abstract class Mutation {
     ArrayList<Chromosome> population;
@@ -11,8 +12,11 @@ abstract class Mutation {
     protected abstract void mutateChromosome(Chromosome chromosome);
 
     void mutatePopulation() {
-        for (int i = 0; i < population.size(); i++)
-            mutateChromosome(population.get(i));
+        for (int i = 0; i < population.size(); i++) {
+            if (ThreadLocalRandom.current().nextInt(0, 100) <= probability)
+                mutateChromosome(population.get(i));
+        }
+
     }
 
     void modifyChromosome(Chromosome chromosome, char[] genome) {
