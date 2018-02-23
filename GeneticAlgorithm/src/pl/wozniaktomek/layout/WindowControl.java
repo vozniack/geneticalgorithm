@@ -2,8 +2,6 @@ package pl.wozniaktomek.layout;
 
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.NumberAxis;
@@ -14,6 +12,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
+import pl.wozniaktomek.algorithm.components.Function;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -33,7 +32,6 @@ public class WindowControl implements Initializable {
     @FXML private Button buttonStart;
     @FXML private Button buttonStop;
     @FXML private CheckBox checkChart;
-    @FXML private CheckBox checkAnimation;
 
     /* Algorithm data controls */
     @FXML private ChoiceBox<String> methodSelection;
@@ -52,7 +50,8 @@ public class WindowControl implements Initializable {
 
     /* Chart */
     private ScatterChart<Number, Number> chart;
-    private XYChart.Series populationSeries;
+    private XYChart.Series<Number, Number> populationSeries;
+    private  XYChart.Series<Number, Number> minSerie;
     private NumberAxis xAxis;
     private NumberAxis yAxis;
     private Double[] x;
@@ -68,7 +67,8 @@ public class WindowControl implements Initializable {
 
     /* Main methods */
     private void startAlgorithm() {
-        chart.getData().removeAll();
+        chart.getData().remove(populationSeries);
+        chart.getData().remove(minSerie);
 
         if (prepareAlgorithm()) {
             disableControls();
@@ -102,9 +102,12 @@ public class WindowControl implements Initializable {
 
         geneticAlgorithm.setMethods(selectionMethod, crossoverMethod, mutationMethod);
         geneticAlgorithm.setChart(checkChart.isSelected());
+        countMinimum();
     }
 
-    public void finishAlgorithm() {
+    public void finishAlgorithm(ArrayList<Chromosome> population) {
+        Platform.runLater(() -> showPopulation(population));
+        Platform.runLater(this::showValues);
         Platform.runLater(this::stopAlgorithm);
     }
 
@@ -122,21 +125,23 @@ public class WindowControl implements Initializable {
 
     public void updatePopulation(ArrayList<Chromosome> population) {
         Platform.runLater(() -> {
-            if (checkChart.isSelected()) {
-                chart.setAnimated(checkAnimation.isSelected());
-                readValues(population);
-
-                chart.getData().remove(populationSeries);
-                populationSeries = new XYChart.Series();
-                populationSeries.setName("Current generation");
-
-                for (int i = 0; i < x.length; i++)
-                    populationSeries.getData().add(new XYChart.Data(x[i], y[i]));
-                chart.getData().add(populationSeries);
-            }
-
-            geneticAlgorithm.setUpdating(false);
+            if (checkChart.isSelected())
+                showPopulation(population);
         });
+
+        Platform.runLater(() -> geneticAlgorithm.setUpdating(false));
+    }
+
+    private void showPopulation(ArrayList<Chromosome> population) {
+        readValues(population);
+        chart.getData().remove(populationSeries);
+
+        populationSeries = new XYChart.Series<>();
+        populationSeries.setName("Current generation");
+
+        for (int i = 0; i < x.length; i++)
+            populationSeries.getData().add(new XYChart.Data<>(x[i], y[i]));
+        chart.getData().add(populationSeries);
     }
 
     private void readValues(ArrayList<Chromosome> population) {
@@ -147,6 +152,44 @@ public class WindowControl implements Initializable {
             x[i] = population.get(i).getValueX();
             y[i] = population.get(i).getValueY();
         }
+    }
+
+    private void showValues() {
+        for (XYChart.Series<Number, Number> series : chart.getData())
+            for (XYChart.Data<Number, Number> serie : series.getData())
+                Tooltip.install(serie.getNode(), new Tooltip(String.format("(x, y) = (%1.3f, %1.3f)", serie.getXValue().doubleValue(), serie.getYValue().doubleValue())));
+    }
+
+    private void countMinimum() {
+        Double from = Double.valueOf(rangeFrom.getText());
+        Double to = Double.valueOf(rangeTo.getText());
+        Double minimum = new Function().getResult(from, from);
+        Double minX = null, minY = null;
+
+        Double result = null;
+        Double tmpX = from, tmpY = from;
+
+        while (tmpX < to) {
+            while (tmpY < to) {
+                result = new Function().getResult(tmpX, tmpY);
+                if (result < minimum) {
+                    minimum = result;
+                    minX = tmpX;
+                    minY = tmpY;
+                }
+
+                tmpY += 0.001;
+            }
+
+            tmpY = from;
+            tmpX += 0.001;
+        }
+
+        System.out.println(minX + " " + minY + " " + result);
+        minSerie = new XYChart.Series<>();
+        minSerie.setName("Minimum");
+        minSerie.getData().add(new XYChart.Data<>(minX, minY));
+        chart.getData().add(minSerie);
     }
 
     private void enableControls() {
@@ -173,7 +216,7 @@ public class WindowControl implements Initializable {
             @Override
             public void run() {
                 textTime.setText(String.valueOf(System.currentTimeMillis() - startTime) + " ms");
-            }}, 0, 25);
+            }}, 0, 50);
     }
 
     private void stopTime() {
@@ -191,14 +234,13 @@ public class WindowControl implements Initializable {
         methodCrossover.setValue("Single");
         methodMutation.setValue("BitString");
         sizePopulation.setText("100");
-        sizeChromosome.setText("12");
-        sizeGenerations.setText("250");
+        sizeChromosome.setText("16");
+        sizeGenerations.setText("500");
         probabilityCrossover.getValueFactory().setValue(50);
         probabilityMutation.getValueFactory().setValue(5);
         rangeFrom.setText("-2");
         rangeTo.setText("2");
         checkChart.setSelected(true);
-        checkAnimation.setSelected(true);
     }
 
     /* Initialization methods */
@@ -211,6 +253,10 @@ public class WindowControl implements Initializable {
         buttonDefault.setOnAction(event -> defaultData());
         buttonStart.setOnAction(event -> startAlgorithm());
         buttonStop.setOnAction(event -> stopAlgorithm());
+
+        checkChart.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (geneticAlgorithm != null) geneticAlgorithm.setChart(newValue);
+        });
     }
 
     private void addListeners() {
@@ -235,8 +281,8 @@ public class WindowControl implements Initializable {
     }
 
     private void fillControls() {
-        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
-        methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double", "Multi"));
+        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament", "Ranking"));
+        methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));
         probabilityCrossover.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));
         probabilityMutation.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));

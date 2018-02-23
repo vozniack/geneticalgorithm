@@ -14,7 +14,7 @@ import java.util.ArrayList;
 public class GeneticAlgorithm extends Thread {
     /* Operations */
     public enum SelectionMethod {ROULETTE, TOURNAMENT, RANKING}
-    public enum CrossoverMethod {SINGLE, DOUBLE, MULTI}
+    public enum CrossoverMethod {SINGLE, DOUBLE}
     public enum MutationMethod {BITSTRING, FLIPBIT}
 
     /* Initial data */
@@ -25,7 +25,7 @@ public class GeneticAlgorithm extends Thread {
 
     /* Operational data */
     private ArrayList<Chromosome> currentPopulation;
-    private Integer generationCunter;
+    private volatile Integer generationCunter;
     private volatile Boolean isRunning;
     private volatile Boolean isChart;
     private volatile Boolean isUpdating;
@@ -63,11 +63,19 @@ public class GeneticAlgorithm extends Thread {
 
     private void updateUI() {
         GeneticAlgorithmApp.windowControl.updateGeneration(generationCunter);
+        System.out.println("## Just updated counter");
+
         if (isChart) {
             GeneticAlgorithmApp.windowControl.updatePopulation(currentPopulation);
+            System.out.println("## Just updated population");
             isUpdating = true;
+
+            Integer counter = 0;
             while (isUpdating) try {
-                Thread.sleep(50);
+                if (counter > 10) isUpdating = false;
+                System.out.println("## Waiting for update population");
+                counter++;
+                Thread.sleep(25);
             } catch (InterruptedException exception) {
                 exception.printStackTrace();
             }
@@ -81,9 +89,16 @@ public class GeneticAlgorithm extends Thread {
             if (generationCunter.equals(generationsAmount)) break;
 
             if (checkPopulation()) {
+                System.out.println("Selection");
                 selection();
+
+                System.out.println("Crossover");
                 crossover();
+
+                System.out.println("Mutation");
                 mutation();
+
+                System.out.println("Updating");
                 generationCunter++;
                 updateUI();
             }
@@ -91,12 +106,12 @@ public class GeneticAlgorithm extends Thread {
             else break;
         }
 
+        updateUI();
         finishAlgorithm();
     }
 
     private void finishAlgorithm() {
-        updateUI();
-        GeneticAlgorithmApp.windowControl.finishAlgorithm();
+        GeneticAlgorithmApp.windowControl.finishAlgorithm(currentPopulation);
     }
 
     private void selection() {
@@ -120,9 +135,6 @@ public class GeneticAlgorithm extends Thread {
                 break;
 
             case DOUBLE:
-                break;
-
-            case MULTI:
                 break;
         }
     }

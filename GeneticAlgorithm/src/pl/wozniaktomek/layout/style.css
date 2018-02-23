@@ -1,13 +1,41 @@
 .root {
     -fx-font-family: Cambria;
     -fx-font-size: 12 px;
+    -fx-background-color: gray;
+}
+
+/* Header */
+.menu-bar {
+    -fx-background-color: rgba(52, 73, 94, 1.0);
+}
+
+.menu-bar .label {
+    -fx-font-size: 14 px;
+    -fx-text-fill: white;
+}
+
+.menu-bar .container .menu-button:hover, .menu-bar .container .menu-button:showing, .menu-bar .container .menu-button:focused {
+    -fx-background-color: gray;
+}
+
+.menu-bar .menu-item {
+    -fx-background-color: rgba(52, 73, 94, 1.0);
+}
+
+.paneHeader {
+    -fx-background-color: rgba(52, 73, 94, 1.0);
+}
+
+.paneHeader > Text {
+    -fx-font-size: 14 px;
+    -fx-fill: white;
 }
 
 /* Controls error classes */
-.text-field.error {
+.text-field .error {
     -fx-border-color: red;
 }
 
-.combo-box.error {
+.combo-box .error {
     -fx-border-color: red;
 }
