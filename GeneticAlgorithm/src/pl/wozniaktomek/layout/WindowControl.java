@@ -51,7 +51,7 @@ public class WindowControl implements Initializable {
     /* Chart */
     private ScatterChart<Number, Number> chart;
     private XYChart.Series<Number, Number> populationSeries;
-    private  XYChart.Series<Number, Number> minSerie;
+    private XYChart.Series<Number, Number> minSerie;
     private NumberAxis xAxis;
     private NumberAxis yAxis;
     private Double[] x;
@@ -91,6 +91,7 @@ public class WindowControl implements Initializable {
         GeneticAlgorithm.SelectionMethod selectionMethod = null;
         if (methodSelection.getValue().equals("Roulette")) selectionMethod = GeneticAlgorithm.SelectionMethod.ROULETTE;
         if (methodSelection.getValue().equals("Tournament")) selectionMethod = GeneticAlgorithm.SelectionMethod.TOURNAMENT;
+        if (methodSelection.getValue().equals("Ranking")) selectionMethod = GeneticAlgorithm.SelectionMethod.RANKING;
 
         GeneticAlgorithm.CrossoverMethod crossoverMethod = null;
         if (methodCrossover.getValue().equals("Single")) crossoverMethod = GeneticAlgorithm.CrossoverMethod.SINGLE;
@@ -102,7 +103,7 @@ public class WindowControl implements Initializable {
 
         geneticAlgorithm.setMethods(selectionMethod, crossoverMethod, mutationMethod);
         geneticAlgorithm.setChart(checkChart.isSelected());
-        countMinimum();
+        // countMinimum();
     }
 
     public void finishAlgorithm(ArrayList<Chromosome> population) {
@@ -133,8 +134,8 @@ public class WindowControl implements Initializable {
     }
 
     private void showPopulation(ArrayList<Chromosome> population) {
-        readValues(population);
         chart.getData().remove(populationSeries);
+        readValues(population);
 
         populationSeries = new XYChart.Series<>();
         populationSeries.setName("Current generation");
@@ -166,7 +167,7 @@ public class WindowControl implements Initializable {
         Double minimum = new Function().getResult(from, from);
         Double minX = null, minY = null;
 
-        Double result = null;
+        Double result;
         Double tmpX = from, tmpY = from;
 
         while (tmpX < to) {
@@ -185,7 +186,6 @@ public class WindowControl implements Initializable {
             tmpX += 0.001;
         }
 
-        System.out.println(minX + " " + minY + " " + result);
         minSerie = new XYChart.Series<>();
         minSerie.setName("Minimum");
         minSerie.getData().add(new XYChart.Data<>(minX, minY));

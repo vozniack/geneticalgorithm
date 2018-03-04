@@ -10,6 +10,7 @@ import pl.wozniaktomek.algorithm.mutation.FlipBit;
 import pl.wozniaktomek.algorithm.selection.Roulette;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneticAlgorithm extends Thread {
     /* Operations */
@@ -99,6 +100,7 @@ public class GeneticAlgorithm extends Thread {
                 mutation();
 
                 System.out.println("Updating");
+
                 generationCunter++;
                 updateUI();
             }
@@ -146,7 +148,7 @@ public class GeneticAlgorithm extends Thread {
                 break;
 
             case FLIPBIT:
-                clonePopulation(new FlipBit(currentPopulation).getPopulation());
+                clonePopulation(new FlipBit(currentPopulation, probabilityMutation).getPopulation());
                 break;
         }
     }

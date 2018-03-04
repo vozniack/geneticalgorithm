@@ -5,8 +5,9 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 
 public class FlipBit extends Mutation {
-    public FlipBit(ArrayList<Chromosome> population) {
+    public FlipBit(ArrayList<Chromosome> population, Integer probability) {
         this.population = population;
+        this.probability = probability;
         mutatePopulation();
     }
 
