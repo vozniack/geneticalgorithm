@@ -8,6 +8,7 @@ import pl.wozniaktomek.algorithm.crossover.SinglePoint;
 import pl.wozniaktomek.algorithm.mutation.BitString;
 import pl.wozniaktomek.algorithm.mutation.FlipBit;
 import pl.wozniaktomek.algorithm.selection.Roulette;
+import pl.wozniaktomek.algorithm.selection.Tournament;
 
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -123,6 +124,7 @@ public class GeneticAlgorithm extends Thread {
                 break;
 
             case TOURNAMENT:
+                clonePopulation(new Tournament(currentPopulation, (int)Math.round(currentPopulation.size() * 0.05)).getPopulation());
                 break;
 
             case RANKING:

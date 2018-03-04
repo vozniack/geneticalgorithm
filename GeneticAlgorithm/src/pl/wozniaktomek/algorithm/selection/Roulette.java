@@ -11,7 +11,7 @@ public class Roulette extends Selection {
     public Roulette(ArrayList<Chromosome> oldPopulation) {
         this.oldPopulation = oldPopulation;
         countFitness();
-        sortPopulation(true);
+        sortPopulation(oldPopulation, true);
         countDistribution();
         countPercent();
         selectPopulation();

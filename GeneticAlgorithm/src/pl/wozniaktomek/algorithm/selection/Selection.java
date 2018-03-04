@@ -18,10 +18,10 @@ abstract class Selection {
             chromosome.setFitness(new Function().getResult(chromosome.getValueX(), chromosome.getValueY()));
     }
 
-    void sortPopulation(Boolean isAsc) {
+    void sortPopulation(ArrayList<Chromosome> population, Boolean isAsc) {
         try {
-            if (isAsc) oldPopulation.sort(Comparator.comparingDouble(Chromosome::getFitness).reversed());
-            else oldPopulation.sort(Comparator.comparingDouble(Chromosome::getFitness));
+            if (isAsc) population.sort(Comparator.comparingDouble(Chromosome::getFitness).reversed());
+            else population.sort(Comparator.comparingDouble(Chromosome::getFitness));
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();
             // TODO STOP ALGORITHM
