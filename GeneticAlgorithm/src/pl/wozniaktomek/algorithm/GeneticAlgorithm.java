@@ -11,7 +11,6 @@ import pl.wozniaktomek.algorithm.selection.Roulette;
 import pl.wozniaktomek.algorithm.selection.Tournament;
 
 import java.util.ArrayList;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class GeneticAlgorithm extends Thread {
     /* Operations */
@@ -125,9 +124,6 @@ public class GeneticAlgorithm extends Thread {
 
             case TOURNAMENT:
                 clonePopulation(new Tournament(currentPopulation, (int)Math.round(currentPopulation.size() * 0.05)).getPopulation());
-                break;
-
-            case RANKING:
                 break;
         }
     }

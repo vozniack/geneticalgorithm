@@ -3,13 +3,11 @@ Classical genetic algorithm with binary representation of floating point numbers
 
 ## Selection methods
 * Roulette
-* Linear Ranking
 * Tournament
 
 ## Crossing methods
 * Single Point
 * Double Point
-* Multi Point
 
 ## Mutation methods
 * Bit String

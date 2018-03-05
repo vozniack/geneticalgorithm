@@ -91,7 +91,6 @@ public class WindowControl implements Initializable {
         GeneticAlgorithm.SelectionMethod selectionMethod = null;
         if (methodSelection.getValue().equals("Roulette")) selectionMethod = GeneticAlgorithm.SelectionMethod.ROULETTE;
         if (methodSelection.getValue().equals("Tournament")) selectionMethod = GeneticAlgorithm.SelectionMethod.TOURNAMENT;
-        if (methodSelection.getValue().equals("Ranking")) selectionMethod = GeneticAlgorithm.SelectionMethod.RANKING;
 
         GeneticAlgorithm.CrossoverMethod crossoverMethod = null;
         if (methodCrossover.getValue().equals("Single")) crossoverMethod = GeneticAlgorithm.CrossoverMethod.SINGLE;

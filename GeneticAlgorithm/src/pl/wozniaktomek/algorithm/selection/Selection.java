@@ -24,7 +24,6 @@ abstract class Selection {
             else population.sort(Comparator.comparingDouble(Chromosome::getFitness));
         } catch (IllegalArgumentException exception) {
             exception.printStackTrace();
-            // TODO STOP ALGORITHM
         }
     }
 
