@@ -276,11 +276,12 @@ public class WindowControl implements Initializable {
         xAxis = new NumberAxis(-3, 3, 0.5);
         yAxis = new NumberAxis(-3, 3, 0.5);
         chart = new ScatterChart<>(xAxis, yAxis);
+        chart.setLegendVisible(false);
         vBox.getChildren().add(chart);
     }
 
     private void fillControls() {
-        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament", "Ranking"));
+        methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
         methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));
         probabilityCrossover.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100));

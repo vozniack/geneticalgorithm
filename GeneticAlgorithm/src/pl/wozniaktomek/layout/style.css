@@ -1,7 +1,18 @@
+/* Main */
 .root {
     -fx-font-family: Cambria;
     -fx-font-size: 12 px;
-    -fx-background-color: gray;
+    -fx-background-color: rgba(232, 238, 241, 1.0);
+}
+
+/* Panels */
+.pane {
+    -fx-background-color: rgba(232, 238, 241, 1.0);
+    -fx-border-color: rgba(200, 208, 212, 1.0);
+}
+
+.pane-info {
+    -fx-background-color: rgba(232, 238, 241, 1.0);
 }
 
 /* Header */
