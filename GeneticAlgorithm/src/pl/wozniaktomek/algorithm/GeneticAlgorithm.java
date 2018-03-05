@@ -4,6 +4,7 @@ import pl.wozniaktomek.GeneticAlgorithmApp;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 import pl.wozniaktomek.algorithm.components.Function;
 import pl.wozniaktomek.algorithm.components.Generate;
+import pl.wozniaktomek.algorithm.crossover.DoublePoint;
 import pl.wozniaktomek.algorithm.crossover.SinglePoint;
 import pl.wozniaktomek.algorithm.mutation.BitString;
 import pl.wozniaktomek.algorithm.mutation.FlipBit;
@@ -135,6 +136,7 @@ public class GeneticAlgorithm extends Thread {
                 break;
 
             case DOUBLE:
+                clonePopulation(new DoublePoint(currentPopulation, probabilityCrossover).getPopulation());
                 break;
         }
     }

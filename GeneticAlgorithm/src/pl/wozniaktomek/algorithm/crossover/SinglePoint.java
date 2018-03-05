@@ -25,18 +25,4 @@ public class SinglePoint extends Crossover {
         createChromosome(newFirstGenome);
         createChromosome(newSecondGenome);
     }
-
-    @Override
-    protected void createChromosome(char[] genome) {
-        Integer chromosomeSize = genome.length / 2;
-        Integer[] x = new Integer[chromosomeSize];
-        Integer[] y = new Integer[chromosomeSize];
-
-        for (int i = 0; i < chromosomeSize; i++) {
-            x[i] = (Integer.valueOf(String.valueOf(genome[i])));
-            y[i] = (Integer.valueOf(String.valueOf(genome[i + chromosomeSize])));
-        }
-
-        addChromosome(x, y);
-    }
 }

@@ -3,6 +3,7 @@ package pl.wozniaktomek.algorithm.crossover;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 abstract class Crossover {
@@ -11,7 +12,6 @@ abstract class Crossover {
     Double minRange, maxRange;
 
     protected abstract void crossGenome(String firstGenome, String secondGenome);
-    protected abstract void createChromosome(char[] genome);
 
     void crossPopulation() {
         for (int i = 0; i < population.size(); i++)
@@ -34,7 +34,20 @@ abstract class Crossover {
         return chromosome;
     }
 
-    void addChromosome(Integer[] x, Integer[] y) {
+    void createChromosome(char[] genome) {
+        Integer chromosomeSize = genome.length / 2;
+        Integer[] x = new Integer[chromosomeSize];
+        Integer[] y = new Integer[chromosomeSize];
+
+        for (int i = 0; i < chromosomeSize; i++) {
+            x[i] = (Integer.valueOf(String.valueOf(genome[i])));
+            y[i] = (Integer.valueOf(String.valueOf(genome[i + chromosomeSize])));
+        }
+
+        addChromosome(x, y);
+    }
+
+    private void addChromosome(Integer[] x, Integer[] y) {
         population.add(new Chromosome(x, y, minRange, maxRange));
     }
 
