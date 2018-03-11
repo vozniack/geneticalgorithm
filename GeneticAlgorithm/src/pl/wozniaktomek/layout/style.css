@@ -1,7 +1,7 @@
 /* Main */
 .root {
     -fx-font-family: Cambria;
-    -fx-font-size: 12 px;
+    -fx-font-size: 12px;
     -fx-background-color: rgba(232, 238, 241, 1.0);
 }
 
@@ -17,45 +17,81 @@
 
 /* Header */
 .menu-bar {
-    -fx-background-color: rgba(52, 73, 94, 1.0);
+    -fx-background-color: rgba(30, 61, 88, 1.0);
 }
 
 .menu-bar .label {
-    -fx-font-size: 14 px;
-    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-text-fill: rgba(255, 255, 255, 1.0);
 }
 
 .menu-bar .container .menu-button:hover, .menu-bar .container .menu-button:showing, .menu-bar .container .menu-button:focused {
-    -fx-background-color: gray;
+    -fx-background-color: rgba(5, 125, 205, 1.0);
 }
 
 .menu-bar .menu-item {
-    -fx-background-color: rgba(52, 73, 94, 1.0);
+    -fx-background-color: white;
+}
+
+.menu-bar .menu-item .label {
+    -fx-text-fill: rgba(30, 61, 88, 1.0);
+}
+
+.menu-bar .menu-item:hover {
+    -fx-background-color: rgba(5, 125, 205, 1.0);
+}
+
+.menu-bar .menu-item:hover .label {
+    -fx-text-fill: rgba(255, 255, 255, 1.0);
 }
 
 .paneHeader {
-    -fx-background-color: rgba(52, 73, 94, 1.0);
+    -fx-background-color: rgba(30, 61, 88, 1.0);
 }
 
 .paneHeader > Text {
-    -fx-font-size: 14 px;
-    -fx-fill: white;
+    -fx-font-size: 14px;
+    -fx-fill: rgba(255, 255, 255, 1.0);
+}
+
+/* Controls */
+.choice-box {
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
+}
+
+.choice-box .menu-item:focused {
+    -fx-background-color: rgba(5, 125, 205, 1.0);
+}
+
+.check-box {
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
+}
+
+.text-field {
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
+}
+
+.spinner {
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
+}
+
+.button {
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
 }
 
 /* Controls error classes */
 .text-field .error {
-    -fx-border-color: red;
+    -fx-border-color: rgba(145, 8, 12, 1.0);
 }
 
 .combo-box .error {
-    -fx-border-color: red;
+    -fx-border-color: rgba(145, 8, 12, 1.0);
 }
 
 /* Chart */
-
 .chart-symbol {
     -fx-shape: "M5,0 L10,9 L5,18 L0,9 Z";
-    -fx-background-color: #22bad9;
+    -fx-background-color: rgba(5, 125, 205, 1.0);
     -fx-padding: 6px;
 }
 

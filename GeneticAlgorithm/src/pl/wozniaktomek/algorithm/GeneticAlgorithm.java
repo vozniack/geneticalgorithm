@@ -101,7 +101,6 @@ public class GeneticAlgorithm extends Thread {
                 mutation();
 
                 System.out.println("Updating");
-
                 generationCunter++;
                 updateUI();
             }
