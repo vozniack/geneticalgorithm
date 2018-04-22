@@ -1,6 +1,8 @@
 package pl.wozniaktomek.layout;
 
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,26 +28,43 @@ public class WindowControl implements Initializable {
     /* Containers */
     @FXML private VBox vBox;
 
-    /* Controls */
+    /* Main controls */
     @FXML private MenuItem menuClose;
-    @FXML private Button buttonDefault;
     @FXML private Button buttonStart;
     @FXML private Button buttonStop;
-    @FXML private CheckBox checkChart;
+    @FXML private Button buttonDefault;
+    @FXML private CheckBox chartActive;
+    @FXML private CheckBox chartAnimated;
 
-    /* Algorithm data controls */
-    @FXML private ChoiceBox<String> methodSelection;
-    @FXML private ChoiceBox<String> methodCrossover;
-    @FXML private ChoiceBox<String> methodMutation;
+    /* General controls */
     @FXML private TextField sizePopulation;
     @FXML private TextField sizeChromosome;
     @FXML private TextField sizeGenerations;
-    @FXML private Spinner<Integer> probabilityCrossover;
-    @FXML private Spinner<Integer> probabilityMutation;
     @FXML private TextField rangeFrom;
     @FXML private TextField rangeTo;
+
+    /* Function controls */
+    @FXML private ChoiceBox<String> function;
+    @FXML private Text functionType;
+    @FXML private Text functionExtreme;
+
+    /* Selection controls */
+    @FXML private ChoiceBox<String> methodSelection;
+    @FXML private Separator tournamentSeparator;
+    @FXML private Text tournamentText;
+    @FXML private TextField tournamentAmount;
+
+    /* Crossover controls */
+    @FXML private ChoiceBox<String> methodCrossover;
+    @FXML private Spinner<Integer> probabilityCrossover;
+
+    /* Mutation controls */
+    @FXML private ChoiceBox<String> methodMutation;
+    @FXML private Spinner<Integer> probabilityMutation;
+
     @FXML private Text textGeneration;
     @FXML private Text textTime;
+    @FXML private Text textStatus;
     private ArrayList<Control> controls;
 
     /* Chart */
@@ -75,6 +94,8 @@ public class WindowControl implements Initializable {
             createAlgorithm();
             executorService.submit(geneticAlgorithm);
             startTime();
+            textStatus.setText("Working");
+            textStatus.setStyle("-fx-fill: rgba(5, 125, 205, 1.0);");
         }
     }
 
@@ -101,7 +122,7 @@ public class WindowControl implements Initializable {
         if (methodMutation.getValue().equals("FlipBit")) mutationMethod = GeneticAlgorithm.MutationMethod.FLIPBIT;
 
         geneticAlgorithm.setMethods(selectionMethod, crossoverMethod, mutationMethod);
-        geneticAlgorithm.setChart(checkChart.isSelected());
+        geneticAlgorithm.setChart(chartActive.isSelected());
         // countMinimum();
     }
 
@@ -112,10 +133,12 @@ public class WindowControl implements Initializable {
     }
 
     private void stopAlgorithm() {
+        stopTime();
         enableControls();
         geneticAlgorithm.setRunning(false);
         geneticAlgorithm.interrupt();
-        stopTime();
+        textStatus.setText("Finished");
+        textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0);");
     }
 
     /* Interface updating */
@@ -125,7 +148,7 @@ public class WindowControl implements Initializable {
 
     public void updatePopulation(ArrayList<Chromosome> population) {
         Platform.runLater(() -> {
-            if (checkChart.isSelected())
+            if (chartActive.isSelected())
                 showPopulation(population);
         });
 
@@ -229,6 +252,7 @@ public class WindowControl implements Initializable {
     }
 
     private void defaultData() {
+        function.setValue("f(x,y) = 2x^2 + 2y^2 - 4");
         methodSelection.setValue("Roulette");
         methodCrossover.setValue("Single");
         methodMutation.setValue("BitString");
@@ -239,7 +263,8 @@ public class WindowControl implements Initializable {
         probabilityMutation.getValueFactory().setValue(5);
         rangeFrom.setText("-2");
         rangeTo.setText("2");
-        checkChart.setSelected(true);
+        chartActive.setSelected(true);
+        chartAnimated.setSelected(true);
     }
 
     /* Initialization methods */
@@ -253,7 +278,7 @@ public class WindowControl implements Initializable {
         buttonStart.setOnAction(event -> startAlgorithm());
         buttonStop.setOnAction(event -> stopAlgorithm());
 
-        checkChart.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        chartActive.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (geneticAlgorithm != null) geneticAlgorithm.setChart(newValue);
         });
     }
@@ -270,7 +295,30 @@ public class WindowControl implements Initializable {
             xAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 0.5);
             yAxis.setUpperBound(Math.round(Double.valueOf(newValue)) + 0.5);
         }));
-    }
+
+        methodSelection.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.equals("Tournament")) {
+                tournamentSeparator.setVisible(true);
+                tournamentText.setVisible(true);
+                tournamentAmount.setVisible(true);
+            }
+
+            else {
+                tournamentSeparator.setVisible(false);
+                tournamentText.setVisible(false);
+                tournamentAmount.setVisible(false);
+            }
+        });
+
+        function.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
+            if (newValue.equals("f(x,y) = 2x^2 + 2y^2 - 4")) {
+                functionType.setText("Minimalization");
+                functionExtreme.setText("f(0, 0) = -4");
+            }
+        });
+
+        chartAnimated.selectedProperty().addListener((observable, oldValue, newValue) -> chart.setAnimated(newValue));
+}
 
     private void createChart() {
         xAxis = new NumberAxis(-3, 3, 0.5);
@@ -281,6 +329,7 @@ public class WindowControl implements Initializable {
     }
 
     private void fillControls() {
+        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4"));
         methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
         methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));

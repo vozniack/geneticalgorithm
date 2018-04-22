@@ -54,6 +54,11 @@
     -fx-fill: rgba(255, 255, 255, 1.0);
 }
 
+/* Text status */
+.status {
+    -fx-font-weight: bold;
+}
+
 /* Controls */
 .choice-box {
     -fx-focus-color: rgba(5, 125, 205, 1.0);
@@ -81,11 +86,11 @@
 
 /* Controls error classes */
 .text-field .error {
-    -fx-border-color: rgba(145, 8, 12, 1.0);
+    -fx-border-color: rgba(223, 12, 18, 1.0);
 }
 
 .combo-box .error {
-    -fx-border-color: rgba(145, 8, 12, 1.0);
+    -fx-border-color: rgba(223, 12, 18, 1.0);
 }
 
 /* Chart */
