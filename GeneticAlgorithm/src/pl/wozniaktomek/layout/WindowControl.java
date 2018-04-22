@@ -1,7 +1,6 @@
 package pl.wozniaktomek.layout;
 
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -14,7 +13,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
-import pl.wozniaktomek.algorithm.components.Function;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -62,15 +60,14 @@ public class WindowControl implements Initializable {
     @FXML private ChoiceBox<String> methodMutation;
     @FXML private Spinner<Integer> probabilityMutation;
 
+    /* Status controls */
     @FXML private Text textGeneration;
     @FXML private Text textTime;
     @FXML private Text textStatus;
-    private ArrayList<Control> controls;
 
     /* Chart */
     private ScatterChart<Number, Number> chart;
     private XYChart.Series<Number, Number> populationSeries;
-    private XYChart.Series<Number, Number> minSerie;
     private NumberAxis xAxis;
     private NumberAxis yAxis;
     private Double[] x;
@@ -79,6 +76,7 @@ public class WindowControl implements Initializable {
     /* Algorithm */
     private ExecutorService executorService;
     private GeneticAlgorithm geneticAlgorithm;
+    private ArrayList<Control> controls;
 
     /* Timer */
     private Timer timer;
@@ -87,7 +85,6 @@ public class WindowControl implements Initializable {
     /* Main methods */
     private void startAlgorithm() {
         chart.getData().remove(populationSeries);
-        chart.getData().remove(minSerie);
 
         if (prepareAlgorithm()) {
             disableControls();
@@ -95,7 +92,12 @@ public class WindowControl implements Initializable {
             executorService.submit(geneticAlgorithm);
             startTime();
             textStatus.setText("Working");
-            textStatus.setStyle("-fx-fill: rgba(5, 125, 205, 1.0);");
+            textStatus.setStyle("-fx-fill: rgba(5, 125, 205, 1.0)");
+        }
+
+        else {
+            textStatus.setText("Unfilled settings");
+            textStatus.setStyle("-fx-fill: rgba(223, 12, 18, 1.0)");
         }
     }
 
@@ -123,7 +125,6 @@ public class WindowControl implements Initializable {
 
         geneticAlgorithm.setMethods(selectionMethod, crossoverMethod, mutationMethod);
         geneticAlgorithm.setChart(chartActive.isSelected());
-        // countMinimum();
     }
 
     public void finishAlgorithm(ArrayList<Chromosome> population) {
@@ -138,7 +139,7 @@ public class WindowControl implements Initializable {
         geneticAlgorithm.setRunning(false);
         geneticAlgorithm.interrupt();
         textStatus.setText("Finished");
-        textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0);");
+        textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0)");
     }
 
     /* Interface updating */
@@ -181,37 +182,6 @@ public class WindowControl implements Initializable {
         for (XYChart.Series<Number, Number> series : chart.getData())
             for (XYChart.Data<Number, Number> serie : series.getData())
                 Tooltip.install(serie.getNode(), new Tooltip(String.format("(x, y) = (%1.3f, %1.3f)", serie.getXValue().doubleValue(), serie.getYValue().doubleValue())));
-    }
-
-    private void countMinimum() {
-        Double from = Double.valueOf(rangeFrom.getText());
-        Double to = Double.valueOf(rangeTo.getText());
-        Double minimum = new Function().getResult(from, from);
-        Double minX = null, minY = null;
-
-        Double result;
-        Double tmpX = from, tmpY = from;
-
-        while (tmpX < to) {
-            while (tmpY < to) {
-                result = new Function().getResult(tmpX, tmpY);
-                if (result < minimum) {
-                    minimum = result;
-                    minX = tmpX;
-                    minY = tmpY;
-                }
-
-                tmpY += 0.001;
-            }
-
-            tmpY = from;
-            tmpX += 0.001;
-        }
-
-        minSerie = new XYChart.Series<>();
-        minSerie.setName("Minimum");
-        minSerie.getData().add(new XYChart.Data<>(minX, minY));
-        chart.getData().add(minSerie);
     }
 
     private void enableControls() {
@@ -259,6 +229,7 @@ public class WindowControl implements Initializable {
         sizePopulation.setText("100");
         sizeChromosome.setText("16");
         sizeGenerations.setText("500");
+        tournamentAmount.setText("8");
         probabilityCrossover.getValueFactory().setValue(50);
         probabilityMutation.getValueFactory().setValue(5);
         rangeFrom.setText("-2");
@@ -277,10 +248,6 @@ public class WindowControl implements Initializable {
         buttonDefault.setOnAction(event -> defaultData());
         buttonStart.setOnAction(event -> startAlgorithm());
         buttonStop.setOnAction(event -> stopAlgorithm());
-
-        chartActive.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            if (geneticAlgorithm != null) geneticAlgorithm.setChart(newValue);
-        });
     }
 
     private void addListeners() {
@@ -315,21 +282,31 @@ public class WindowControl implements Initializable {
                 functionType.setText("Minimalization");
                 functionExtreme.setText("f(0, 0) = -4");
             }
+
+            if (newValue.equals("f(x) = x^2 - 2x + 3")) {
+                functionType.setText("Minimalization");
+                functionExtreme.setText("f(1) = 2");
+            }
+        });
+
+        chartActive.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            if (geneticAlgorithm != null)
+                geneticAlgorithm.setChart(newValue);
         });
 
         chartAnimated.selectedProperty().addListener((observable, oldValue, newValue) -> chart.setAnimated(newValue));
 }
 
     private void createChart() {
-        xAxis = new NumberAxis(-3, 3, 0.5);
-        yAxis = new NumberAxis(-3, 3, 0.5);
+        xAxis = new NumberAxis(-1, 1, 0.5);
+        yAxis = new NumberAxis(-1, 1, 0.5);
         chart = new ScatterChart<>(xAxis, yAxis);
         chart.setLegendVisible(false);
         vBox.getChildren().add(chart);
     }
 
     private void fillControls() {
-        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4"));
+        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4", "f(x) = x^2 - 2x + 3"));
         methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
         methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));
@@ -339,6 +316,7 @@ public class WindowControl implements Initializable {
 
     private void grabControls() {
         controls = new ArrayList<>();
+        controls.add(function);
         controls.add(methodSelection);
         controls.add(methodCrossover);
         controls.add(methodMutation);

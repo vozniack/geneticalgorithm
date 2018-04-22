@@ -5,14 +5,10 @@
     -fx-background-color: rgba(232, 238, 241, 1.0);
 }
 
-/* Panels */
-.pane {
-    -fx-background-color: rgba(232, 238, 241, 1.0);
-    -fx-border-color: rgba(200, 208, 212, 1.0);
-}
-
+/* Info panel */
 .pane-info {
     -fx-background-color: rgba(232, 238, 241, 1.0);
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
 }
 
 /* Header */
@@ -60,36 +56,12 @@
 }
 
 /* Controls */
-.choice-box {
-    -fx-focus-color: rgba(5, 125, 205, 1.0);
-}
-
 .choice-box .menu-item:focused {
     -fx-background-color: rgba(5, 125, 205, 1.0);
 }
 
-.check-box {
-    -fx-focus-color: rgba(5, 125, 205, 1.0);
-}
-
-.text-field {
-    -fx-focus-color: rgba(5, 125, 205, 1.0);
-}
-
-.spinner {
-    -fx-focus-color: rgba(5, 125, 205, 1.0);
-}
-
-.button {
-    -fx-focus-color: rgba(5, 125, 205, 1.0);
-}
-
 /* Controls error classes */
-.text-field .error {
-    -fx-border-color: rgba(223, 12, 18, 1.0);
-}
-
-.combo-box .error {
+.error {
     -fx-border-color: rgba(223, 12, 18, 1.0);
 }
 
@@ -99,4 +71,3 @@
     -fx-background-color: rgba(5, 125, 205, 1.0);
     -fx-padding: 6px;
 }
-

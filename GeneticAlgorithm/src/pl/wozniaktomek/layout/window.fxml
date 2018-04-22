@@ -32,28 +32,38 @@
             <Insets bottom="2.0" left="2.0" right="2.0" top="2.0" />
          </padding>
       </MenuBar>
-      <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="125.0" spacing="5.0" styleClass="paneHeader" AnchorPane.rightAnchor="250.0" AnchorPane.topAnchor="0.0">
+      <HBox alignment="CENTER_RIGHT" spacing="10.0" styleClass="paneHeader" AnchorPane.bottomAnchor="510.0" AnchorPane.leftAnchor="500.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
-            <Text fx:id="textGeneration" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT" prefHeight="30.0" prefWidth="125.0" spacing="5.0" styleClass="paneHeader" AnchorPane.rightAnchor="125.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time:" />
-            <Text fx:id="textTime" strokeType="OUTSIDE" strokeWidth="0.0" text="0 ms" />
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="5.0" styleClass="paneHeader">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Generation:" />
+                  <Text fx:id="textGeneration" strokeType="OUTSIDE" strokeWidth="0.0" text="0" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="5.0" styleClass="paneHeader">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Time:" />
+                  <Text fx:id="textTime" strokeType="OUTSIDE" strokeWidth="0.0" text="0 ms" />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="30.0" spacing="5.0" styleClass="paneHeader">
+               <children>
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" />
+                  <Text fx:id="textStatus" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="status" text="Waiting..." />
+               </children>
+               <padding>
+                  <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+               </padding>
+            </HBox>
          </children>
          <padding>
-            <Insets bottom="5.0" left="5.0" right="15.0" top="5.0" />
-         </padding>
-      </HBox>
-      <HBox alignment="CENTER_RIGHT" layoutX="10.0" layoutY="10.0" prefHeight="30.0" prefWidth="125.0" spacing="5.0" styleClass="paneHeader" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" />
-            <Text fx:id="textStatus" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="status" text="Waiting..." />
-         </children>
-         <padding>
-            <Insets bottom="5.0" left="5.0" right="15.0" top="5.0" />
+            <Insets right="10.0" />
          </padding>
       </HBox>
       <VBox fx:id="vBox" alignment="TOP_CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="30.0">
@@ -62,7 +72,7 @@
               <tabs>
                 <Tab text="General">
                   <content>
-                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
@@ -89,26 +99,22 @@
                 </Tab>
                   <Tab text="Function">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Function" />
-                                    <ChoiceBox fx:id="function" prefWidth="400.0" />
+                                    <ChoiceBox fx:id="function" prefWidth="250.0" />
                                     <Separator orientation="VERTICAL" prefHeight="200.0" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Type:" />
-                                    <Text fx:id="functionType" strokeType="OUTSIDE" strokeWidth="0.0" text="no function selected">
-                                       <font>
-                                          <Font name="System Bold" size="12.0" />
-                                       </font>
-                                    </Text>
+                                    <Text fx:id="functionType" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="status" text="no function selected" />
                                     <Separator orientation="VERTICAL" prefHeight="200.0" />
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Extreme:">
                                        <font>
                                           <Font name="Cambria" size="12.0" />
                                        </font>
                                     </Text>
-                                    <Text fx:id="functionExtreme" strokeType="OUTSIDE" strokeWidth="0.0" text="no function selected">
+                                    <Text fx:id="functionExtreme" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="status" text="no function selected">
                                        <font>
                                           <Font name="Cambria Bold" size="12.0" />
                                        </font>
@@ -124,7 +130,7 @@
                   </Tab>
                   <Tab text="Selection">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
@@ -145,7 +151,7 @@
                   </Tab>
                   <Tab text="Crossover">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
@@ -165,7 +171,7 @@
                   </Tab>
                   <Tab text="Mutation">
                      <content>
-                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
                            <children>
                               <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                  <children>
@@ -185,6 +191,7 @@
                   </Tab>
               </tabs>
             </TabPane>
+            <Separator prefWidth="200.0" />
             <HBox alignment="CENTER_LEFT" spacing="5.0" styleClass="pane-info">
                <children>
                   <Button fx:id="buttonStart" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Start" />
