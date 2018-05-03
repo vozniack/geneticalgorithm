@@ -31,6 +31,8 @@ public class WindowControl implements Initializable {
     @FXML private Button buttonStart;
     @FXML private Button buttonStop;
     @FXML private Button buttonDefault;
+    @FXML private Button buttonReset;
+    @FXML private Button buttonSaveFile;
     @FXML private CheckBox chartActive;
     @FXML private CheckBox chartAnimated;
 
@@ -77,6 +79,7 @@ public class WindowControl implements Initializable {
     private ExecutorService executorService;
     private GeneticAlgorithm geneticAlgorithm;
     private ArrayList<Control> controls;
+    private Boolean isInterrupted;
 
     /* Timer */
     private Timer timer;
@@ -138,8 +141,18 @@ public class WindowControl implements Initializable {
         enableControls();
         geneticAlgorithm.setRunning(false);
         geneticAlgorithm.interrupt();
-        textStatus.setText("Finished");
-        textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0)");
+
+        if (isInterrupted) {
+            textStatus.setText("Interrupted");
+            textStatus.setStyle("-fx-fill: rgba(223, 12, 18, 1.0)");
+        }
+
+        else {
+            textStatus.setText("Finished");
+            textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0)");
+        }
+
+        isInterrupted = false;
     }
 
     /* Interface updating */
@@ -190,6 +203,7 @@ public class WindowControl implements Initializable {
         buttonDefault.setDisable(false);
         buttonStart.setDisable(false);
         buttonStop.setDisable(true);
+        buttonSaveFile.setDisable(false);
     }
 
     private void disableControls() {
@@ -198,6 +212,7 @@ public class WindowControl implements Initializable {
         buttonDefault.setDisable(true);
         buttonStart.setDisable(true);
         buttonStop.setDisable(false);
+        buttonSaveFile.setDisable(true);
     }
 
     /* Time */
@@ -247,7 +262,10 @@ public class WindowControl implements Initializable {
         menuClose.setOnAction(event -> closeProgram());
         buttonDefault.setOnAction(event -> defaultData());
         buttonStart.setOnAction(event -> startAlgorithm());
-        buttonStop.setOnAction(event -> stopAlgorithm());
+        buttonStop.setOnAction(event -> {
+            isInterrupted = true;
+            stopAlgorithm();
+        });
     }
 
     private void addListeners() {

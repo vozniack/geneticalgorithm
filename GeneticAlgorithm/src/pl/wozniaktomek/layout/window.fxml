@@ -189,6 +189,23 @@
                         </AnchorPane>
                      </content>
                   </Tab>
+                  <Tab text="Raport">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" styleClass="pane-info">
+                           <children>
+                              <HBox alignment="CENTER_LEFT" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                 <children>
+                                    <Button fx:id="buttonSaveFile" disable="true" mnemonicParsing="false" text="Save to file" />
+                                    <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Raport will be ready after finishing work..." />
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                                 </padding>
+                              </HBox>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
               </tabs>
             </TabPane>
             <Separator prefWidth="200.0" />
@@ -197,6 +214,7 @@
                   <Button fx:id="buttonStart" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Start" />
                   <Button fx:id="buttonStop" disable="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Stop" />
                   <Button fx:id="buttonDefault" defaultButton="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Default options" />
+                  <Button fx:id="buttonReset" cancelButton="true" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" text="Reset" />
                   <Separator orientation="VERTICAL">
                      <HBox.margin>
                         <Insets left="5.0" />
