@@ -9,9 +9,11 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
+import pl.wozniaktomek.algorithm.Report;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.net.URL;
@@ -25,6 +27,7 @@ import java.util.concurrent.Executors;
 public class WindowControl implements Initializable {
     /* Containers */
     @FXML private VBox vBox;
+    @FXML private AnchorPane reportPane;
 
     /* Main controls */
     @FXML private MenuItem menuClose;
@@ -32,6 +35,8 @@ public class WindowControl implements Initializable {
     @FXML private Button buttonStop;
     @FXML private Button buttonDefault;
     @FXML private Button buttonReset;
+    @FXML private Button buttonShowReport;
+    @FXML private Button buttonCloseReport;
     @FXML private Button buttonSaveFile;
     @FXML private CheckBox chartActive;
     @FXML private CheckBox chartAnimated;
@@ -79,7 +84,6 @@ public class WindowControl implements Initializable {
     private ExecutorService executorService;
     private GeneticAlgorithm geneticAlgorithm;
     private ArrayList<Control> controls;
-    private Boolean isInterrupted;
 
     /* Timer */
     private Timer timer;
@@ -106,7 +110,6 @@ public class WindowControl implements Initializable {
 
     private Boolean prepareAlgorithm() {
         // TODO CONTROLS CHECK
-
         return true;
     }
 
@@ -114,26 +117,53 @@ public class WindowControl implements Initializable {
         geneticAlgorithm = new GeneticAlgorithm(Integer.valueOf(sizePopulation.getText()), Integer.valueOf(sizeChromosome.getText()), Integer.valueOf(sizeGenerations.getText()),
                 probabilityCrossover.getValue(), probabilityMutation.getValue(), Double.valueOf(rangeFrom.getText()), Double.valueOf(rangeTo.getText()));
 
+        // Methods settings
         GeneticAlgorithm.SelectionMethod selectionMethod = null;
+        GeneticAlgorithm.CrossoverMethod crossoverMethod = null;
+        GeneticAlgorithm.MutationMethod mutationMethod = null;
+
         if (methodSelection.getValue().equals("Roulette")) selectionMethod = GeneticAlgorithm.SelectionMethod.ROULETTE;
         if (methodSelection.getValue().equals("Tournament")) selectionMethod = GeneticAlgorithm.SelectionMethod.TOURNAMENT;
 
-        GeneticAlgorithm.CrossoverMethod crossoverMethod = null;
         if (methodCrossover.getValue().equals("Single")) crossoverMethod = GeneticAlgorithm.CrossoverMethod.SINGLE;
         if (methodCrossover.getValue().equals("Double")) crossoverMethod = GeneticAlgorithm.CrossoverMethod.DOUBLE;
 
-        GeneticAlgorithm.MutationMethod mutationMethod = null;
         if (methodMutation.getValue().equals("BitString")) mutationMethod = GeneticAlgorithm.MutationMethod.BITSTRING;
         if (methodMutation.getValue().equals("FlipBit")) mutationMethod = GeneticAlgorithm.MutationMethod.FLIPBIT;
 
         geneticAlgorithm.setMethods(selectionMethod, crossoverMethod, mutationMethod);
+
+        // Function settings
+        GeneticAlgorithm.FunctionInstance functionInstance = null;
+        GeneticAlgorithm.FunctionType functionType = null;
+        GeneticAlgorithm.FunctionSize functionSize = null;
+
+        if (function.getValue().equals("f(x,y) = 2x^2 + 2y^2 - 4")) {
+            functionInstance = GeneticAlgorithm.FunctionInstance.F1;
+            functionType = GeneticAlgorithm.FunctionType.MIN;
+            functionSize = GeneticAlgorithm.FunctionSize.V2;
+        }
+
+        if (function.getValue().equals("f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2")) {
+            functionInstance = GeneticAlgorithm.FunctionInstance.F2;
+            functionType = GeneticAlgorithm.FunctionType.MAX;
+            functionSize = GeneticAlgorithm.FunctionSize.V2;
+        }
+
+        geneticAlgorithm.setFunction(functionInstance, functionType, functionSize);
+
+        // Chart settings
         geneticAlgorithm.setChart(chartActive.isSelected());
+
+        // Additionals settings
+        if (methodSelection.getValue().equals("Tournament")) geneticAlgorithm.setTournamentSize(Integer.valueOf(tournamentAmount.getText()));
     }
 
     public void finishAlgorithm(ArrayList<Chromosome> population) {
         Platform.runLater(() -> showPopulation(population));
         Platform.runLater(this::showValues);
         Platform.runLater(this::stopAlgorithm);
+        Platform.runLater(this::createReport);
     }
 
     private void stopAlgorithm() {
@@ -141,18 +171,13 @@ public class WindowControl implements Initializable {
         enableControls();
         geneticAlgorithm.setRunning(false);
         geneticAlgorithm.interrupt();
+        textStatus.setText("Finished");
+        textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0)");
+    }
 
-        if (isInterrupted) {
-            textStatus.setText("Interrupted");
-            textStatus.setStyle("-fx-fill: rgba(223, 12, 18, 1.0)");
-        }
-
-        else {
-            textStatus.setText("Finished");
-            textStatus.setStyle("-fx-fill: rgba(76, 187, 23, 1.0)");
-        }
-
-        isInterrupted = false;
+    /* Report */
+    private void createReport() {
+        // report = new Report(geneticAlgorithm);
     }
 
     /* Interface updating */
@@ -203,6 +228,7 @@ public class WindowControl implements Initializable {
         buttonDefault.setDisable(false);
         buttonStart.setDisable(false);
         buttonStop.setDisable(true);
+        buttonShowReport.setDisable(false);
         buttonSaveFile.setDisable(false);
     }
 
@@ -212,6 +238,7 @@ public class WindowControl implements Initializable {
         buttonDefault.setDisable(true);
         buttonStart.setDisable(true);
         buttonStop.setDisable(false);
+        buttonShowReport.setDisable(true);
         buttonSaveFile.setDisable(true);
     }
 
@@ -262,10 +289,9 @@ public class WindowControl implements Initializable {
         menuClose.setOnAction(event -> closeProgram());
         buttonDefault.setOnAction(event -> defaultData());
         buttonStart.setOnAction(event -> startAlgorithm());
-        buttonStop.setOnAction(event -> {
-            isInterrupted = true;
-            stopAlgorithm();
-        });
+        buttonStop.setOnAction(event -> stopAlgorithm());
+        buttonShowReport.setOnAction(event -> reportPane.setVisible(true));
+        buttonCloseReport.setOnAction(event -> reportPane.setVisible(false));
     }
 
     private void addListeners() {
@@ -299,6 +325,15 @@ public class WindowControl implements Initializable {
             if (newValue.equals("f(x,y) = 2x^2 + 2y^2 - 4")) {
                 functionType.setText("Minimalization");
                 functionExtreme.setText("f(0, 0) = -4");
+                rangeFrom.setText("-1");
+                rangeTo.setText("1");
+            }
+
+            if (newValue.equals("f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2")) {
+                functionType.setText("Maximization");
+                functionExtreme.setText("f(1, 2) = 6");
+                rangeFrom.setText("-2");
+                rangeTo.setText("2");
             }
 
             if (newValue.equals("f(x) = x^2 - 2x + 3")) {
@@ -324,7 +359,7 @@ public class WindowControl implements Initializable {
     }
 
     private void fillControls() {
-        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4", "f(x) = x^2 - 2x + 3"));
+        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4", "f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2", "f(x) = x^2 - 2x + 3"));
         methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
         methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));

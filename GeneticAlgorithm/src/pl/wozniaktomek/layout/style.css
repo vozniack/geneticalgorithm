@@ -11,6 +11,11 @@
     -fx-focus-color: rgba(5, 125, 205, 1.0);
 }
 
+.pane-report {
+    -fx-background-color: rgba(208, 220, 226, 0.75);
+    -fx-focus-color: rgba(5, 125, 205, 1.0);
+}
+
 /* Header */
 .menu-bar {
     -fx-background-color: rgba(30, 61, 88, 1.0);

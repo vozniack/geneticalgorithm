@@ -19,15 +19,23 @@ public class GeneticAlgorithm extends Thread {
     public enum CrossoverMethod {SINGLE, DOUBLE}
     public enum MutationMethod {BITSTRING, FLIPBIT}
 
+    /* Function */
+    public enum FunctionInstance {F1, F2, F3, F4};
+    public enum FunctionType {MIN, MAX};
+    public enum FunctionSize {V1, V2};
+
     /* Initial data */
-    private Integer generationsAmount, probabilityCrossover, probabilityMutation;
+    private Integer generationsAmount, probabilityCrossover, probabilityMutation, tournamentSize;
     private SelectionMethod selectionMethod;
     private CrossoverMethod crossoverMethod;
     private MutationMethod mutationMethod;
+    private FunctionInstance functionInstance;
+    private FunctionType functionType;
+    private FunctionSize functionSize;
 
     /* Operational data */
     private ArrayList<Chromosome> currentPopulation;
-    private volatile Integer generationCunter;
+    private volatile Integer generationCounter;
     private volatile Boolean isRunning;
     private volatile Boolean isChart;
     private volatile Boolean isUpdating;
@@ -44,6 +52,16 @@ public class GeneticAlgorithm extends Thread {
         this.selectionMethod = selectionMethod;
         this.crossoverMethod = crossoverMethod;
         this.mutationMethod = mutationMethod;
+    }
+
+    public void setFunction(FunctionInstance functionInstance, FunctionType functionType, FunctionSize functionSize) {
+        this.functionInstance = functionInstance;
+        this.functionType = functionType;
+        this.functionSize = functionSize;
+    }
+
+    public void setTournamentSize(Integer tournamentSize) {
+        this.tournamentSize = tournamentSize;
     }
 
     private void generate(Integer populationSize, Integer chromosomeSize, Double minRange, Double maxRange) {
@@ -64,18 +82,18 @@ public class GeneticAlgorithm extends Thread {
     }
 
     private void updateUI() {
-        GeneticAlgorithmApp.windowControl.updateGeneration(generationCunter);
-        System.out.println("## Just updated counter");
+        GeneticAlgorithmApp.windowControl.updateGeneration(generationCounter);
+        // System.out.println("## Just updated counter");
 
         if (isChart) {
             GeneticAlgorithmApp.windowControl.updatePopulation(currentPopulation);
-            System.out.println("## Just updated population");
+            // System.out.println("## Just updated population");
             isUpdating = true;
 
             Integer counter = 0;
             while (isUpdating) try {
                 if (counter > 10) isUpdating = false;
-                System.out.println("## Waiting for update population");
+                // System.out.println("## Waiting for update population");
                 counter++;
                 Thread.sleep(25);
             } catch (InterruptedException exception) {
@@ -86,22 +104,22 @@ public class GeneticAlgorithm extends Thread {
 
     /* Algorithm methods */
     private void startAlgorithm() {
-        generationCunter = 0;
+        generationCounter = 0;
         while (isRunning) {
-            if (generationCunter.equals(generationsAmount)) break;
+            if (generationCounter.equals(generationsAmount)) break;
 
             if (checkPopulation()) {
-                System.out.println("Selection");
+                // System.out.println("Selection");
                 selection();
 
-                System.out.println("Crossover");
+                // System.out.println("Crossover");
                 crossover();
 
-                System.out.println("Mutation");
+                // System.out.println("Mutation");
                 mutation();
 
-                System.out.println("Updating");
-                generationCunter++;
+                // System.out.println("Updating");
+                generationCounter++;
                 updateUI();
             }
 
@@ -119,11 +137,11 @@ public class GeneticAlgorithm extends Thread {
     private void selection() {
         switch (selectionMethod) {
             case ROULETTE:
-                clonePopulation(new Roulette(currentPopulation).getPopulation());
+                clonePopulation(new Roulette(currentPopulation, functionInstance, functionType, functionSize).getPopulation());
                 break;
 
             case TOURNAMENT:
-                clonePopulation(new Tournament(currentPopulation, (int)Math.round(currentPopulation.size() * 0.05)).getPopulation());
+                clonePopulation(new Tournament(currentPopulation, functionInstance, functionType, functionSize, tournamentSize).getPopulation());
                 break;
         }
     }
@@ -167,14 +185,6 @@ public class GeneticAlgorithm extends Thread {
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
-    }
-
-    /* Only for test */
-    private void showPopulation() {
-        for (Chromosome chromosome : currentPopulation)
-            System.out.println("[x] = " + chromosome.getValueX() + " [y] = " + chromosome.getValueY() + " [f(x,y)] = " +
-                    new Function().getResult(chromosome.getValueX(), chromosome.getValueY()) +
-                    " | " + chromosome.getStringX() + " " + chromosome.getStringY() + " | " + chromosome.getFitness());
     }
 
     @Override

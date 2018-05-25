@@ -1,5 +1,6 @@
 package pl.wozniaktomek.algorithm.selection;
 
+import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
@@ -8,9 +9,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Tournament extends Selection {
     private Integer tournamentSize;
 
-    public Tournament(ArrayList<Chromosome> oldPopulation, Integer tournamentSize) {
+    public Tournament(ArrayList<Chromosome> oldPopulation, GeneticAlgorithm.FunctionInstance functionInstance, GeneticAlgorithm.FunctionType functionType, GeneticAlgorithm.FunctionSize functionSize, Integer tournamentSize) {
         this.oldPopulation = oldPopulation;
+        this.functionInstance = functionInstance;
+        this.functionType = functionType;
+        this.functionSize = functionSize;
         this.tournamentSize = tournamentSize;
+
         countFitness();
         selectPopulation();
     }
@@ -29,7 +34,10 @@ public class Tournament extends Selection {
         for (int i = 0; i < tournamentSize; i++)
             tmpPopulation.add(selectChromosome());
 
-        sortPopulation(tmpPopulation, false);
+        if (functionType == GeneticAlgorithm.FunctionType.MIN)
+            sortPopulation(tmpPopulation, false);
+        else sortPopulation(tmpPopulation, true);
+
         return tmpPopulation.get(0);
     }
 

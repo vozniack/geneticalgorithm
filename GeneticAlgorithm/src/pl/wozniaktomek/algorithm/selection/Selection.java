@@ -1,21 +1,29 @@
 package pl.wozniaktomek.algorithm.selection;
 
+import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 import pl.wozniaktomek.algorithm.components.Function;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 abstract class Selection {
     ArrayList<Chromosome> oldPopulation;
     ArrayList<Chromosome> newPopulation;
+    GeneticAlgorithm.FunctionInstance functionInstance;
+    GeneticAlgorithm.FunctionType functionType;
+    GeneticAlgorithm.FunctionSize functionSize;
 
     protected abstract void selectPopulation();
 
     void countFitness() {
-        for (Chromosome chromosome : oldPopulation)
-            chromosome.setFitness(new Function().getResult(chromosome.getValueX(), chromosome.getValueY()));
+        if (functionSize == GeneticAlgorithm.FunctionSize.V1)
+            for (Chromosome chromosome : oldPopulation)
+                chromosome.setFitness(new Function(functionInstance).getResult(chromosome.getValueX()));
+
+        else
+            for (Chromosome chromosome : oldPopulation)
+                chromosome.setFitness(new Function(functionInstance).getResult(chromosome.getValueX(), chromosome.getValueY()));
     }
 
     void sortPopulation(ArrayList<Chromosome> population, Boolean isAsc) {
