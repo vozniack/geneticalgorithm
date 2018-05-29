@@ -40,11 +40,13 @@ public class GeneticAlgorithm extends Thread {
     private volatile Boolean isUpdating;
 
     /* Initializing methods */
-    public GeneticAlgorithm(Integer populationSize, Integer chromosomeSize, Integer generationsAmount, Integer probabilityCrossover, Integer probabilityMutation, Double minRange, Double maxRange) {
-        this.generationsAmount = generationsAmount;
+    public void createPopulation(Integer populationSize, Integer chromosomeSize, Double minRange, Double maxRange) {
+        generate(populationSize, chromosomeSize, minRange, maxRange);
+    }
+
+    public void setProbabilities(Integer probabilityCrossover, Integer probabilityMutation) {
         this.probabilityCrossover = probabilityCrossover;
         this.probabilityMutation = probabilityMutation;
-        generate(populationSize, chromosomeSize, minRange, maxRange);
     }
 
     public void setMethods(SelectionMethod selectionMethod, CrossoverMethod crossoverMethod, MutationMethod mutationMethod) {
@@ -57,6 +59,10 @@ public class GeneticAlgorithm extends Thread {
         this.functionInstance = functionInstance;
         this.functionType = functionType;
         this.functionSize = functionSize;
+    }
+
+    public void setGenerationsAmount(Integer generationsAmount) {
+        this.generationsAmount = generationsAmount;
     }
 
     public void setTournamentSize(Integer tournamentSize) {
