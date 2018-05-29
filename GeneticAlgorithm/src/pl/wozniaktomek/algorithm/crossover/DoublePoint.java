@@ -1,5 +1,6 @@
 package pl.wozniaktomek.algorithm.crossover;
 
+import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
@@ -7,12 +8,13 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class DoublePoint extends Crossover {
 
-    public DoublePoint(ArrayList<Chromosome> population, Integer probability) {
+    public DoublePoint(ArrayList<Chromosome> population, Integer probability, GeneticAlgorithm.FunctionSize functionSize) {
         this.population = population;
         this.probability = probability;
-        this.chromosomeSize = population.get(0).getSize();
+        this.functionSize = functionSize;
         this.minRange = population.get(0).getMinRange();
         this.maxRange = population.get(0).getMaxRange();
+
         crossPopulation();
     }
 

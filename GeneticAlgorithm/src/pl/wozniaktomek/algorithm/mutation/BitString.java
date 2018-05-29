@@ -1,21 +1,27 @@
 package pl.wozniaktomek.algorithm.mutation;
 
+import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class BitString extends Mutation {
-    public BitString(ArrayList<Chromosome> population, Integer probability) {
+    public BitString(ArrayList<Chromosome> population, Integer probability, GeneticAlgorithm.FunctionSize functionSize) {
         this.population = population;
         this.probability = probability;
+        this.functionSize = functionSize;
         mutatePopulation();
     }
 
     @Override
     protected void mutateChromosome(Chromosome chromosome) {
         population.remove(chromosome);
-        char[] genome = (chromosome.getStringX() + chromosome.getStringY()).toCharArray();
+
+        char[] genome;
+        if (functionSize == GeneticAlgorithm.FunctionSize.V1)
+            genome = chromosome.getStringX().toCharArray();
+        else genome = (chromosome.getStringX() + chromosome.getStringY()).toCharArray();
 
         Integer point = ThreadLocalRandom.current().nextInt(0, genome.length);
         if (genome[point] == '1') genome[point] = '0';

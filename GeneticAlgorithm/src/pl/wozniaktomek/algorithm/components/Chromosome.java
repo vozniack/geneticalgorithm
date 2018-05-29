@@ -24,6 +24,13 @@ public class Chromosome implements Cloneable {
         countProperties();
     }
 
+    public Chromosome(Integer[] x, Double minRange, Double maxRange) {
+        this.x = x;
+        this.minRange = minRange;
+        this.maxRange = maxRange;
+        countProperties();
+    }
+
     /* Calculation methods */
     private void countProperties() {
         maxValue = 0d;

@@ -1,5 +1,6 @@
 package pl.wozniaktomek.algorithm.mutation;
 
+import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.concurrent.ThreadLocalRandom;
 abstract class Mutation {
     ArrayList<Chromosome> population;
     Integer probability;
+    GeneticAlgorithm.FunctionSize functionSize;
 
     protected abstract void mutateChromosome(Chromosome chromosome);
 
@@ -16,17 +18,31 @@ abstract class Mutation {
             if (ThreadLocalRandom.current().nextInt(0, 100) <= probability)
                 mutateChromosome(population.get(i));
         }
-
     }
 
     void modifyChromosome(Chromosome chromosome, char[] genome) {
-        Integer chromosomeSize = genome.length / 2;
-        Integer[] x = new Integer[chromosomeSize];
-        Integer[] y = new Integer[chromosomeSize];
+        if (functionSize == GeneticAlgorithm.FunctionSize.V1)
+            modifyChromosomeSingle(chromosome, genome);
+        else modifyChromosomeDouble(chromosome, genome);
+    }
 
-        for (int i = 0; i < chromosomeSize; i++) {
+    private void modifyChromosomeSingle(Chromosome chromosome, char[] genome) {
+        Integer[] x = new Integer[genome.length];
+
+        for (int i = 0; i < genome.length / 2; i++)
             x[i] = (Integer.valueOf(String.valueOf(genome[i])));
-            y[i] = (Integer.valueOf(String.valueOf(genome[i + chromosomeSize])));
+
+        chromosome.setValueX(x);
+        population.add(chromosome);
+    }
+
+    private void modifyChromosomeDouble(Chromosome chromosome, char[] genome) {
+        Integer[] x = new Integer[genome.length / 2];
+        Integer[] y = new Integer[genome.length / 2];
+
+        for (int i = 0; i < genome.length / 2; i++) {
+            x[i] = (Integer.valueOf(String.valueOf(genome[i])));
+            y[i] = (Integer.valueOf(String.valueOf(genome[i + genome.length / 2])));
         }
 
         chromosome.setValueX(x);

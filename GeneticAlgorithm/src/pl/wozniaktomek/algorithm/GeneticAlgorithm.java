@@ -2,7 +2,6 @@ package pl.wozniaktomek.algorithm;
 
 import pl.wozniaktomek.GeneticAlgorithmApp;
 import pl.wozniaktomek.algorithm.components.Chromosome;
-import pl.wozniaktomek.algorithm.components.Function;
 import pl.wozniaktomek.algorithm.components.Generate;
 import pl.wozniaktomek.algorithm.crossover.DoublePoint;
 import pl.wozniaktomek.algorithm.crossover.SinglePoint;
@@ -149,11 +148,11 @@ public class GeneticAlgorithm extends Thread {
     private void crossover() {
         switch (crossoverMethod) {
             case SINGLE:
-                clonePopulation(new SinglePoint(currentPopulation, probabilityCrossover).getPopulation());
+                clonePopulation(new SinglePoint(currentPopulation, probabilityCrossover, functionSize).getPopulation());
                 break;
 
             case DOUBLE:
-                clonePopulation(new DoublePoint(currentPopulation, probabilityCrossover).getPopulation());
+                clonePopulation(new DoublePoint(currentPopulation, probabilityCrossover, functionSize).getPopulation());
                 break;
         }
     }
@@ -161,11 +160,11 @@ public class GeneticAlgorithm extends Thread {
     private void mutation() {
         switch (mutationMethod) {
             case BITSTRING:
-                clonePopulation(new BitString(currentPopulation, probabilityMutation).getPopulation());
+                clonePopulation(new BitString(currentPopulation, probabilityMutation, functionSize).getPopulation());
                 break;
 
             case FLIPBIT:
-                clonePopulation(new FlipBit(currentPopulation, probabilityMutation).getPopulation());
+                clonePopulation(new FlipBit(currentPopulation, probabilityMutation, functionSize).getPopulation());
                 break;
         }
     }
