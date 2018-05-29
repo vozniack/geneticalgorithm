@@ -10,6 +10,7 @@ import javafx.scene.chart.ScatterChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
@@ -27,6 +28,7 @@ import java.util.concurrent.Executors;
 public class WindowControl implements Initializable {
     /* Containers */
     @FXML private VBox vBox;
+    @FXML private HBox tournamentBox;
     @FXML private AnchorPane reportPane;
 
     /* Main controls */
@@ -55,8 +57,6 @@ public class WindowControl implements Initializable {
 
     /* Selection controls */
     @FXML private ChoiceBox<String> methodSelection;
-    @FXML private Separator tournamentSeparator;
-    @FXML private Text tournamentText;
     @FXML private TextField tournamentAmount;
 
     /* Crossover controls */
@@ -84,6 +84,7 @@ public class WindowControl implements Initializable {
     private ExecutorService executorService;
     private GeneticAlgorithm geneticAlgorithm;
     private ArrayList<Control> controls;
+    private GeneticAlgorithm.FunctionSize functionSize;
 
     /* Timer */
     private Timer timer;
@@ -96,6 +97,7 @@ public class WindowControl implements Initializable {
         if (prepareAlgorithm()) {
             disableControls();
             createAlgorithm();
+            functionSize = geneticAlgorithm.getFunctionSize();
             executorService.submit(geneticAlgorithm);
             startTime();
             textStatus.setText("Working");
@@ -150,13 +152,20 @@ public class WindowControl implements Initializable {
             functionSize = GeneticAlgorithm.FunctionSize.V2;
         }
 
+        if (function.getValue().equals("f(x) = x^2 - 2x + 3")) {
+            functionInstance = GeneticAlgorithm.FunctionInstance.F3;
+            functionType = GeneticAlgorithm.FunctionType.MIN;
+            functionSize = GeneticAlgorithm.FunctionSize.V1;
+        }
+
         geneticAlgorithm.setFunction(functionInstance, functionType, functionSize);
 
         // Chart settings
         geneticAlgorithm.setChart(chartActive.isSelected());
 
         // Additionals settings
-        if (methodSelection.getValue().equals("Tournament")) geneticAlgorithm.setTournamentSize(Integer.valueOf(tournamentAmount.getText()));
+        if (methodSelection.getValue().equals("Tournament"))
+            geneticAlgorithm.setTournamentSize(Integer.valueOf(tournamentAmount.getText()));
     }
 
     public void finishAlgorithm(ArrayList<Chromosome> population) {
@@ -201,8 +210,14 @@ public class WindowControl implements Initializable {
         populationSeries = new XYChart.Series<>();
         populationSeries.setName("Current generation");
 
-        for (int i = 0; i < x.length; i++)
-            populationSeries.getData().add(new XYChart.Data<>(x[i], y[i]));
+        if (functionSize == GeneticAlgorithm.FunctionSize.V1)
+            for (int i = 0; i < x.length; i++)
+                populationSeries.getData().add(new XYChart.Data<>(x[i], 0));
+
+        else
+            for (int i = 0; i < x.length; i++)
+                populationSeries.getData().add(new XYChart.Data<>(x[i], y[i]));
+
         chart.getData().add(populationSeries);
     }
 
@@ -210,9 +225,18 @@ public class WindowControl implements Initializable {
         x = new Double[population.size()];
         y = new Double[population.size()];
 
-        for (int i = 0; i < population.size(); i++) {
-            x[i] = population.get(i).getValueX();
-            y[i] = population.get(i).getValueY();
+        if (functionSize == GeneticAlgorithm.FunctionSize.V1) {
+            for (int i = 0; i < population.size(); i++) {
+                x[i] = population.get(i).getValueX();
+                y[i] = 0d;
+            }
+        }
+
+        else {
+            for (int i = 0; i < population.size(); i++) {
+                x[i] = population.get(i).getValueX();
+                y[i] = population.get(i).getValueY();
+            }
         }
     }
 
@@ -295,6 +319,7 @@ public class WindowControl implements Initializable {
     }
 
     private void addListeners() {
+        // Chart listeners
         rangeFrom.textProperty().addListener(((observable, oldValue, newValue) -> {
             newValue = newValue.replace(",", ".");
             xAxis.setLowerBound(Math.round(Double.valueOf(newValue)) - 0.5);
@@ -308,17 +333,9 @@ public class WindowControl implements Initializable {
         }));
 
         methodSelection.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {
-            if (newValue.equals("Tournament")) {
-                tournamentSeparator.setVisible(true);
-                tournamentText.setVisible(true);
-                tournamentAmount.setVisible(true);
-            }
-
-            else {
-                tournamentSeparator.setVisible(false);
-                tournamentText.setVisible(false);
-                tournamentAmount.setVisible(false);
-            }
+            if (newValue.equals("Tournament"))
+                tournamentBox.setVisible(true);
+            else tournamentBox.setVisible(false);
         });
 
         function.getSelectionModel().selectedItemProperty().addListener((ObservableValue<? extends String> observable, String oldValue, String newValue) -> {

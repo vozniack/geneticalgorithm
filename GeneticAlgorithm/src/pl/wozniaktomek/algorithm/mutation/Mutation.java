@@ -29,7 +29,7 @@ abstract class Mutation {
     private void modifyChromosomeSingle(Chromosome chromosome, char[] genome) {
         Integer[] x = new Integer[genome.length];
 
-        for (int i = 0; i < genome.length / 2; i++)
+        for (int i = 0; i < genome.length; i++)
             x[i] = (Integer.valueOf(String.valueOf(genome[i])));
 
         chromosome.setValueX(x);

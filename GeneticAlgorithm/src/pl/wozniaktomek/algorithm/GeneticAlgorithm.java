@@ -91,7 +91,8 @@ public class GeneticAlgorithm extends Thread {
 
             Integer counter = 0;
             while (isUpdating) try {
-                if (counter > 10) isUpdating = false;
+                if (counter > 10)
+                    isUpdating = false;
                 // System.out.println("## Waiting for update population");
                 counter++;
                 Thread.sleep(25);
@@ -105,7 +106,8 @@ public class GeneticAlgorithm extends Thread {
     private void startAlgorithm() {
         generationCounter = 0;
         while (isRunning) {
-            if (generationCounter.equals(generationsAmount)) break;
+            if (generationCounter.equals(generationsAmount))
+                break;
 
             if (checkPopulation()) {
                 // System.out.println("Selection");
@@ -184,6 +186,10 @@ public class GeneticAlgorithm extends Thread {
             } catch (CloneNotSupportedException e) {
                 e.printStackTrace();
             }
+    }
+
+    public FunctionSize getFunctionSize() {
+        return this.functionSize;
     }
 
     @Override

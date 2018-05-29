@@ -137,9 +137,12 @@
                                     <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Method" />
                                     <ChoiceBox fx:id="methodSelection" prefWidth="150.0" />
                                     <Separator fx:id="tournamentSeparator" orientation="VERTICAL" prefHeight="200.0" visible="false" />
-                                    <Text fx:id="tournamentText" strokeType="OUTSIDE" strokeWidth="0.0" text="Size of tournament" visible="false" />
-                                    <TextField fx:id="tournamentAmount" promptText="amount" visible="false" />
-                                    <Separator fx:id="tournamentSeparator1" layoutX="240.0" layoutY="28.0" orientation="VERTICAL" prefHeight="200.0" />
+                                    <HBox fx:id="tournamentBox" alignment="CENTER_LEFT" spacing="10.0" visible="false">
+                                       <children>
+                                          <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Size of tournament" />
+                                          <TextField fx:id="tournamentAmount" promptText="amount" />
+                                       </children>
+                                    </HBox>
                                  </children>
                                  <padding>
                                     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
