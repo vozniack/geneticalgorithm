@@ -46,11 +46,11 @@
     -fx-text-fill: rgba(255, 255, 255, 1.0);
 }
 
-.paneHeader {
+.pane-header {
     -fx-background-color: rgba(30, 61, 88, 1.0);
 }
 
-.paneHeader > Text {
+.pane-header > Text {
     -fx-font-size: 14px;
     -fx-fill: rgba(255, 255, 255, 1.0);
 }
@@ -58,6 +58,13 @@
 /* Text status */
 .status {
     -fx-font-weight: bold;
+}
+
+/* Report console */
+.pane-console {
+    -fx-font-family: Consolas;
+    -fx-font-size: 12px;
+    -fx-padding: 16px 4px 4px 16px;
 }
 
 /* Controls */

@@ -194,6 +194,14 @@ public class GeneticAlgorithm extends Thread {
             }
     }
 
+    public ArrayList<Chromosome> getCurrentPopulation() {
+        return this.currentPopulation;
+    }
+
+    public FunctionInstance getFunctionInstance() {
+        return this.functionInstance;
+    }
+
     public FunctionSize getFunctionSize() {
         return this.functionSize;
     }

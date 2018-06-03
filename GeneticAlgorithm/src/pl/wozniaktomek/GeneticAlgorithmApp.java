@@ -10,8 +10,8 @@ import pl.wozniaktomek.layout.WindowControl;
 
 public class GeneticAlgorithmApp extends Application {
     public static WindowControl windowControl;
+    public static Stage stage;
     private Parent algorithmRoot;
-    private Stage stage;
 
     public static void main(String[] args) {
         launch(args);
@@ -37,5 +37,4 @@ public class GeneticAlgorithmApp extends Application {
             System.exit(0);
         });
     }
-
 }

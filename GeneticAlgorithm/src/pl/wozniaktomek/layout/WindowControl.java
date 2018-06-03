@@ -13,16 +13,17 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 import pl.wozniaktomek.algorithm.components.Chromosome;
+import pl.wozniaktomek.algorithm.components.report.Report;
+import pl.wozniaktomek.algorithm.components.report.ReportData;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.ResourceBundle;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
 
 public class WindowControl implements Initializable {
     /* Containers */
@@ -37,7 +38,7 @@ public class WindowControl implements Initializable {
     @FXML private Button buttonDefault;
     @FXML private Button buttonShowReport;
     @FXML private Button buttonCloseReport;
-    @FXML private Button buttonSaveFile;
+    @FXML private Button buttonSaveReport;
     @FXML private CheckBox chartActive;
     @FXML private CheckBox chartAnimated;
 
@@ -71,6 +72,14 @@ public class WindowControl implements Initializable {
     @FXML private Text textStatus;
     private enum ControlStatus {WORKING, UNFILLED, FINISHED}
 
+    /* Report */
+    private Report report;
+    private Boolean isReport;
+
+    /* Report console */
+    @FXML private ScrollPane scrollPane;
+    @FXML private TextFlow reportConsole;
+
     /* Chart */
     private ScatterChart<Number, Number> chart;
     private XYChart.Series<Number, Number> populationSeries;
@@ -83,6 +92,7 @@ public class WindowControl implements Initializable {
     private ExecutorService executorService;
     private GeneticAlgorithm geneticAlgorithm;
     private ArrayList<Control> controls;
+    private GeneticAlgorithm.FunctionInstance functionInstance;
     private GeneticAlgorithm.FunctionSize functionSize;
 
     /* Timer */
@@ -94,31 +104,27 @@ public class WindowControl implements Initializable {
     private void startAlgorithm() {
         chart.getData().remove(populationSeries);
 
-        if (prepareAlgorithm()) {
-            disableControls();
-            createAlgorithm();
-            functionSize = geneticAlgorithm.getFunctionSize();
-            executorService.submit(geneticAlgorithm);
-            startTime();
-            updateStatus(ControlStatus.WORKING);
-        }
+        isReport = false;
+        reportConsole.getChildren().clear();
 
-        else updateStatus(ControlStatus.UNFILLED);
-    }
+        disableControls();
+        createAlgorithm();
+        functionInstance = geneticAlgorithm.getFunctionInstance();
+        functionSize = geneticAlgorithm.getFunctionSize();
 
-    private Boolean prepareAlgorithm() {
-        // TODO CONTROLS CHECK
-        return true;
+        startTime();
+        executorService.submit(geneticAlgorithm);
+        updateStatus(ControlStatus.WORKING);
     }
 
     private void createAlgorithm() {
         // Population settings
-        geneticAlgorithm.createPopulation(sizePopulation.getValue(), sizeChromosome.getValue(),rangeFrom.getValue(), rangeTo.getValue());
+        geneticAlgorithm.createPopulation(sizePopulation.getValue(), sizeChromosome.getValue(), rangeFrom.getValue(), rangeTo.getValue());
 
         // Condition settings
         geneticAlgorithm.setGenerationsAmount(sizeGenerations.getValue());
 
-        // Operator settings
+        // Probabilities settings
         geneticAlgorithm.setProbabilities(probabilityCrossover.getValue(), probabilityMutation.getValue());
 
         // Methods settings
@@ -264,7 +270,7 @@ public class WindowControl implements Initializable {
         buttonStart.setDisable(false);
         buttonStop.setDisable(true);
         buttonShowReport.setDisable(false);
-        buttonSaveFile.setDisable(false);
+        buttonSaveReport.setDisable(false);
     }
 
     private void disableControls() {
@@ -274,7 +280,7 @@ public class WindowControl implements Initializable {
         buttonStart.setDisable(true);
         buttonStop.setDisable(false);
         buttonShowReport.setDisable(true);
-        buttonSaveFile.setDisable(true);
+        buttonSaveReport.setDisable(true);
     }
 
     /* Time */
@@ -315,6 +321,77 @@ public class WindowControl implements Initializable {
         chartAnimated.setSelected(true);
     }
 
+    /* Report */
+    private void createReport() {
+        reportPane.setVisible(true);
+
+        if (!isReport) {
+            ReportData reportData = new ReportData();
+
+            reportData.setSizePopulation(String.valueOf(sizePopulation.getValue()));
+            reportData.setSizeChromosome(String.valueOf(sizeChromosome.getValue()));
+            reportData.setSizeGenerations(String.valueOf(sizeGenerations.getValue()));
+            reportData.setRangeFrom(String.valueOf(rangeFrom.getValue()));
+            reportData.setRangeTo(String.valueOf(rangeTo.getValue()));
+
+            switch (function.getValue()) {
+                case "f(x,y) = 2x^2 + 2y^2 - 4":
+                    reportData.setFunction("f(x,y) = 2x^2 + 2y^2 - 4");
+                    reportData.setFunctionType("minimalization");
+                    reportData.setFunctionExtreme("f(0, 0) = -4");
+                    reportData.setFunctionResult(-4.0);
+                    break;
+
+                case "f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2":
+                    reportData.setFunction("f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2");
+                    reportData.setFunctionType("maximization");
+                    reportData.setFunctionExtreme("f(2/3, -5/3) = 28/3");
+                    reportData.setFunctionResult(9.333333333);
+                    break;
+
+                case "f(x) = x^2 - 2x + 3":
+                    reportData.setFunction("f(x) = x^2 - 2x + 3");
+                    reportData.setFunctionType("minimalization");
+                    reportData.setFunctionExtreme("f(1) = 2");
+                    reportData.setFunctionResult(-2.0);
+                    break;
+            }
+
+            reportData.setMethodSelection(methodSelection.getValue());
+            if (methodSelection.getValue().equals("Tournament"))
+                reportData.setTournamentAmount(String.valueOf(tournamentAmount.getValue()));
+            else reportData.setTournamentAmount(null);
+
+            reportData.setMethodCrossover(methodCrossover.getValue());
+            reportData.setProbabilityCrossover(String.valueOf(probabilityCrossover.getValue()) + "%");
+
+            reportData.setMethodMutation(methodMutation.getValue());
+            reportData.setProbabilityMutation(String.valueOf(probabilityMutation.getValue()) + "%");
+
+            reportData.setAlgorithmGenerations(textGeneration.getText());
+            reportData.setAlgorithmTime(textTime.getText());
+            reportData.setAlgorithmStatus(textStatus.getText());
+
+            reportData.setPopulation(geneticAlgorithm.getCurrentPopulation());
+
+            report = new Report(reportData, functionInstance, functionSize);
+            report.createReport();
+            isReport = true;
+        }
+    }
+
+    public void logMessage(String message) {
+        FutureTask updateUITask = new FutureTask(() -> {
+            reportConsole.getChildren().add(new Text(message));
+            scrollPane.setVvalue(1.0);
+        }, null);
+        Platform.runLater(updateUITask);
+    }
+
+    private void saveReport() {
+        report.saveReport(reportConsole);
+    }
+
     /* Initialization methods */
     private void createAlgorithmInstance() {
         geneticAlgorithm = new GeneticAlgorithm();
@@ -329,8 +406,9 @@ public class WindowControl implements Initializable {
         buttonDefault.setOnAction(event -> defaultData());
         buttonStart.setOnAction(event -> startAlgorithm());
         buttonStop.setOnAction(event -> stopAlgorithm());
-        buttonShowReport.setOnAction(event -> reportPane.setVisible(true));
+        buttonShowReport.setOnAction(event -> createReport());
         buttonCloseReport.setOnAction(event -> reportPane.setVisible(false));
+        buttonSaveReport.setOnAction(event -> saveReport());
     }
 
     private void addScrolls() {
@@ -386,7 +464,7 @@ public class WindowControl implements Initializable {
 
             if (newValue.equals("f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2")) {
                 functionType.setText("Maximization");
-                functionExtreme.setText("f(1, 2) = 6");
+                functionExtreme.setText("f(2/3, -5/3) = 28/3");
                 rangeFrom.getValueFactory().setValue(-2d);
                 rangeTo.getValueFactory().setValue(2d);
             }

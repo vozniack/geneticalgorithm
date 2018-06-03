@@ -1,5 +1,7 @@
 package pl.wozniaktomek.algorithm.components;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Arrays;
 
 public class Chromosome implements Cloneable {
@@ -13,6 +15,9 @@ public class Chromosome implements Cloneable {
     private Double fitness;
     private Double distribution;
     private Double percent;
+
+    private Double smallApproximation;
+    private Double bigApproximation;
 
     private enum ValueType {X, Y}
 
@@ -32,6 +37,11 @@ public class Chromosome implements Cloneable {
     }
 
     /* Calculation methods */
+    public void countApproximation() {
+        smallApproximation = BigDecimal.valueOf(fitness).setScale(3, RoundingMode.HALF_UP).doubleValue();
+        bigApproximation = BigDecimal.valueOf(fitness).setScale(9, RoundingMode.HALF_UP).doubleValue();
+    }
+
     private void countProperties() {
         maxValue = 0d;
         for (int i = 0; i < x.length; i++)
@@ -98,6 +108,14 @@ public class Chromosome implements Cloneable {
 
     public Double getPercent() {
         return percent;
+    }
+
+    public Double getSmallApproximation() {
+        return this.smallApproximation;
+    }
+
+    public Double getBigApproximation() {
+        return this.bigApproximation;
     }
 
     public String getStringX() {
