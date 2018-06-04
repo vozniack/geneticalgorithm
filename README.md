@@ -1,15 +1,18 @@
 # Genetic Algorithm
-Classical genetic algorithm with binary representation of floating point numbers
+**`Version: 1.0`**
 
-## Selection methods
+Classic [genetic algorithm](https://en.wikipedia.org/wiki/Genetic_algorithm "Wikipedia") with binary representation of floating point numbers and work visualisation; prepared for function of one or two variables with the possibility of maximizing and minimizing.
+## Methods
+
+#### Selection
 * Roulette
 * Tournament
 
-## Crossing methods
+#### Crossing
 * Single Point
 * Double Point
 
-## Mutation methods
+#### Mutation
 * Bit String
 * Flip Bit
 

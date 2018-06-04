@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author Function Tomasz Woźniak
+ * @version 1.0
+ */
 public class Report {
     private final String separator = "#################### ";
     private final String space = "";
@@ -24,7 +28,6 @@ public class Report {
     private GeneticAlgorithm.FunctionSize functionSize;
     private GeneticAlgorithm.FunctionInstance functionInstance;
     private ArrayList<Chromosome> population;
-    private Integer populationSize;
     private Double functionResult;
 
     public Report(ReportData reportData, GeneticAlgorithm.FunctionInstance functionInstance, GeneticAlgorithm.FunctionSize functionSize) {
@@ -32,7 +35,6 @@ public class Report {
         this.functionInstance = functionInstance;
         this.functionSize = functionSize;
         population = reportData.getPopulation();
-        populationSize = population.size();
         functionResult = reportData.getFunctionResult();
         countChromosomesValues();
     }
@@ -66,6 +68,7 @@ public class Report {
         FileChooser.ExtensionFilter fileTXT = new FileChooser.ExtensionFilter("text files (*.txt)", "*.txt");
         fileChooser.getExtensionFilters().add(fileTXT);
         fileChooser.setTitle("Choose file");
+        fileChooser.setInitialFileName("geneticAlgorithm_report.txt");
         return fileChooser;
     }
 

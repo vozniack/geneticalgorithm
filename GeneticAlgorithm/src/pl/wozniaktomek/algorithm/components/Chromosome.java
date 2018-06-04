@@ -4,6 +4,10 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Arrays;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class Chromosome implements Cloneable {
     private Integer[] x;
     private Integer[] y;
@@ -138,10 +142,6 @@ public class Chromosome implements Cloneable {
         return maxRange;
     }
 
-    public Integer getSize() {
-        return x.length;
-    }
-
     /* Comparing */
     @Override
     public boolean equals(Object o) {
@@ -155,7 +155,7 @@ public class Chromosome implements Cloneable {
 
     /* Cloning */
     @Override
-    public Chromosome clone() throws CloneNotSupportedException {
+    public Chromosome clone() {
         Chromosome clone;
 
         try {

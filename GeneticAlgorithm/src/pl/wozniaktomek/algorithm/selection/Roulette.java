@@ -6,6 +6,10 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class Roulette extends Selection {
     private Double sumOfDistribution = 0d;
     private Double sumOfFitness = 0d;

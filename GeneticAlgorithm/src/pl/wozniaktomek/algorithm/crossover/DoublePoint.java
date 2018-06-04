@@ -6,6 +6,10 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class DoublePoint extends Crossover {
 
     public DoublePoint(ArrayList<Chromosome> population, Integer probability, GeneticAlgorithm.FunctionSize functionSize) {

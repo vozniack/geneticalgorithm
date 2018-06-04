@@ -5,6 +5,10 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class FlipBit extends Mutation {
     public FlipBit(ArrayList<Chromosome> population, Integer probability, GeneticAlgorithm.FunctionSize functionSize) {
         this.population = population;

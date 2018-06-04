@@ -6,6 +6,10 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class Tournament extends Selection {
     private Integer tournamentSize;
 

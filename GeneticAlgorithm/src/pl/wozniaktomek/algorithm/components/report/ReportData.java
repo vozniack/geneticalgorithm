@@ -4,6 +4,10 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 
 import java.util.ArrayList;
 
+/**
+ * @author Function Tomasz Woźniak
+ * @version 1.0
+ */
 public class ReportData {
     private String sizePopulation;
     private String sizeChromosome;
@@ -32,6 +36,7 @@ public class ReportData {
 
     private ArrayList<Chromosome> population;
 
+    /* Getters and setters */
     String getSizePopulation() {
         return sizePopulation;
     }

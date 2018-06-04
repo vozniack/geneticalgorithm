@@ -25,6 +25,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class WindowControl implements Initializable {
     /* Containers */
     @FXML private VBox vBox;
@@ -163,6 +167,12 @@ public class WindowControl implements Initializable {
         if (function.getValue().equals("f(x) = x^2 - 2x + 3")) {
             functionInstance = GeneticAlgorithm.FunctionInstance.F3;
             functionType = GeneticAlgorithm.FunctionType.MIN;
+            functionSize = GeneticAlgorithm.FunctionSize.V1;
+        }
+
+        if (function.getValue().equals("f(x) = -x^2 + 4x - 8")) {
+            functionInstance = GeneticAlgorithm.FunctionInstance.F4;
+            functionType = GeneticAlgorithm.FunctionType.MAX;
             functionSize = GeneticAlgorithm.FunctionSize.V1;
         }
 
@@ -353,7 +363,14 @@ public class WindowControl implements Initializable {
                     reportData.setFunction("f(x) = x^2 - 2x + 3");
                     reportData.setFunctionType("minimalization");
                     reportData.setFunctionExtreme("f(1) = 2");
-                    reportData.setFunctionResult(-2.0);
+                    reportData.setFunctionResult(2.0);
+                    break;
+
+                case "f(x) = -x^2 + 4x - 8":
+                    reportData.setFunction("f(x) = -x^2 + 4x - 8");
+                    reportData.setFunctionType("maximization");
+                    reportData.setFunctionExtreme("f(2) = -4");
+                    reportData.setFunctionResult(-4.0);
                     break;
             }
 
@@ -475,6 +492,13 @@ public class WindowControl implements Initializable {
                 rangeFrom.getValueFactory().setValue(0d);
                 rangeTo.getValueFactory().setValue(2d);
             }
+
+            if (newValue.equals("f(x) = -x^2 + 4x - 8")) {
+                functionType.setText("Maximization");
+                functionExtreme.setText("f(2) = -4");
+                rangeFrom.getValueFactory().setValue(0d);
+                rangeTo.getValueFactory().setValue(3d);
+            }
         });
 
         // Controls listeners
@@ -498,7 +522,7 @@ public class WindowControl implements Initializable {
     }
 
     private void fillControls() {
-        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4", "f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2", "f(x) = x^2 - 2x + 3"));
+        function.setItems(FXCollections.observableArrayList("f(x,y) = 2x^2 + 2y^2 - 4", "f(x,y) = 5 + 3x - 4y - x^2 + xy - y^2", "f(x) = x^2 - 2x + 3", "f(x) = -x^2 + 4x - 8"));
         methodSelection.setItems(FXCollections.observableArrayList("Roulette", "Tournament"));
         methodCrossover.setItems(FXCollections.observableArrayList("Single", "Double"));
         methodMutation.setItems(FXCollections.observableArrayList("BitString", "FlipBit"));

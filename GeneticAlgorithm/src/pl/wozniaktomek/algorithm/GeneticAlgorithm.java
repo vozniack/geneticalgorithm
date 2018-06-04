@@ -12,16 +12,20 @@ import pl.wozniaktomek.algorithm.selection.Tournament;
 
 import java.util.ArrayList;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class GeneticAlgorithm extends Thread {
     /* Operations */
-    public enum SelectionMethod {ROULETTE, TOURNAMENT, RANKING}
+    public enum SelectionMethod {ROULETTE, TOURNAMENT}
     public enum CrossoverMethod {SINGLE, DOUBLE}
     public enum MutationMethod {BITSTRING, FLIPBIT}
 
     /* Function */
-    public enum FunctionInstance {F1, F2, F3, F4};
-    public enum FunctionType {MIN, MAX};
-    public enum FunctionSize {V1, V2};
+    public enum FunctionInstance {F1, F2, F3, F4}
+    public enum FunctionType {MIN, MAX}
+    public enum FunctionSize {V1, V2}
 
     /* Initial data */
     private Integer generationsAmount, probabilityCrossover, probabilityMutation, tournamentSize;
@@ -34,7 +38,7 @@ public class GeneticAlgorithm extends Thread {
 
     /* Operational data */
     private ArrayList<Chromosome> currentPopulation;
-    private volatile Integer generationCounter;
+    private Integer generationCounter;
     private volatile Boolean isRunning;
     private volatile Boolean isChart;
     private volatile Boolean isUpdating;
@@ -88,18 +92,15 @@ public class GeneticAlgorithm extends Thread {
 
     private void updateUI() {
         GeneticAlgorithmApp.windowControl.updateGeneration(generationCounter);
-        // System.out.println("## Just updated counter");
 
         if (isChart) {
             GeneticAlgorithmApp.windowControl.updatePopulation(currentPopulation);
-            // System.out.println("## Just updated population");
             isUpdating = true;
 
             Integer counter = 0;
             while (isUpdating) try {
                 if (counter > 10)
                     isUpdating = false;
-                // System.out.println("## Waiting for update population");
                 counter++;
                 Thread.sleep(25);
             } catch (InterruptedException exception) {
@@ -116,16 +117,9 @@ public class GeneticAlgorithm extends Thread {
                 break;
 
             if (checkPopulation()) {
-                // System.out.println("Selection");
                 selection();
-
-                // System.out.println("Crossover");
                 crossover();
-
-                // System.out.println("Mutation");
                 mutation();
-
-                // System.out.println("Updating");
                 generationCounter++;
                 updateUI();
             }
@@ -187,11 +181,7 @@ public class GeneticAlgorithm extends Thread {
     private void clonePopulation(ArrayList<Chromosome> newPopulation) {
         currentPopulation = new ArrayList<>(newPopulation.size());
         for (Chromosome chromosome : newPopulation)
-            try {
-                currentPopulation.add(chromosome.clone());
-            } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
-            }
+            currentPopulation.add(chromosome.clone());
     }
 
     public ArrayList<Chromosome> getCurrentPopulation() {

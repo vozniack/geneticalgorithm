@@ -8,6 +8,10 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import pl.wozniaktomek.layout.WindowControl;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class GeneticAlgorithmApp extends Application {
     public static WindowControl windowControl;
     public static Stage stage;

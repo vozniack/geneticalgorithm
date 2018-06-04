@@ -3,6 +3,10 @@ package pl.wozniaktomek.algorithm.components;
 import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class Generate {
     private Integer populationSize, chromosomeSize;
     private Double minRange, maxRange;

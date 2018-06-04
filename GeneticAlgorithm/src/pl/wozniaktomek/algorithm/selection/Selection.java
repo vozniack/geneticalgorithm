@@ -7,6 +7,10 @@ import pl.wozniaktomek.algorithm.components.Function;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 abstract class Selection {
     ArrayList<Chromosome> oldPopulation;
     ArrayList<Chromosome> newPopulation;

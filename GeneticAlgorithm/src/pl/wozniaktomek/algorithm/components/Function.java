@@ -2,6 +2,10 @@ package pl.wozniaktomek.algorithm.components;
 
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 
+/**
+ * @author Function Tomek Woźniak
+ * @version 1.0
+ */
 public class Function {
     private GeneticAlgorithm.FunctionInstance functionInstance;
 
@@ -23,12 +27,13 @@ public class Function {
     }
 
     public Double getResult(Double x) {
-        // f(x) = x^2 - 2x + 3 // result in f(1)
+        // f(x) = x^2 - 2x + 3 // result in f(1) = 2
         if (functionInstance == GeneticAlgorithm.FunctionInstance.F3)
             return Math.pow(x, 2d) - (2 * x) + 3;
 
+        // f(x) = -x^2 + 4x - 8 // result in f(2) = -4
         else if (functionInstance == GeneticAlgorithm.FunctionInstance.F4) {
-            return 1D;
+            return -Math.pow(x, 2d) + (4 * x) - 8;
         }
 
         else return 0D;
