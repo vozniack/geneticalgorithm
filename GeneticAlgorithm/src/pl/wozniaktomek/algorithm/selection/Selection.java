@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 abstract class Selection {

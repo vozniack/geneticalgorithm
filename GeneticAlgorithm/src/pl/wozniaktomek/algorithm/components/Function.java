@@ -3,7 +3,7 @@ package pl.wozniaktomek.algorithm.components;
 import pl.wozniaktomek.algorithm.GeneticAlgorithm;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class Function {

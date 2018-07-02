@@ -13,7 +13,7 @@ import pl.wozniaktomek.algorithm.selection.Tournament;
 import java.util.ArrayList;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class GeneticAlgorithm extends Thread {

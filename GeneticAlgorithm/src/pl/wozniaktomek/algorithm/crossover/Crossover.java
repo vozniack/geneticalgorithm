@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 abstract class Crossover {

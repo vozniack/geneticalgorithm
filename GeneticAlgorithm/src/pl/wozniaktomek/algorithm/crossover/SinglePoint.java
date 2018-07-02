@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class SinglePoint extends Crossover {

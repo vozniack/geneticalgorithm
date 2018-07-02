@@ -6,7 +6,7 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class FlipBit extends Mutation {

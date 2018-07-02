@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * @author Function Tomasz Woźniak
+ * @author Tomasz Woźniak
  * @version 1.0
  */
 public class Report {

@@ -5,7 +5,7 @@ import java.math.RoundingMode;
 import java.util.Arrays;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class Chromosome implements Cloneable {

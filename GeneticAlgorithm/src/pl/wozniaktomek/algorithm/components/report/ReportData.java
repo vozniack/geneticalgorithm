@@ -5,7 +5,7 @@ import pl.wozniaktomek.algorithm.components.Chromosome;
 import java.util.ArrayList;
 
 /**
- * @author Function Tomasz Woźniak
+ * @author Tomasz Woźniak
  * @version 1.0
  */
 public class ReportData {

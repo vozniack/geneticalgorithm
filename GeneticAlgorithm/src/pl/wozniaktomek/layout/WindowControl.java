@@ -26,7 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
 
 /**
- * @author Function Tomek Woźniak
+ * @author Tomek Woźniak
  * @version 1.0
  */
 public class WindowControl implements Initializable {
